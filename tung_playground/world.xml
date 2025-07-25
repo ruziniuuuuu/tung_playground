@@ -1,4 +1,9 @@
 <mujoco>
   <include file="../heroes/tung_tung_sahur/model.xml"/>
   <include file="../heroes/oleg/model.xml"/>
+  <worldbody>
+    <body name="target" pos="0 1 1">
+      <geom name="target_geom" type="sphere" size="0.1" rgba="1 0 0 1"/>
+    </body>
+  </worldbody>
 </mujoco>

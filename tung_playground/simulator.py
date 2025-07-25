@@ -17,7 +17,6 @@ def key_callback(window, key, scancode, action, mods, model, data):
             score = 0
         elif key == glfw.KEY_W:
             data.qfrc_applied[0] = 500000
-            score += 1
         elif key == glfw.KEY_S:
             data.qfrc_applied[0] = -500000
         elif key == glfw.KEY_A:
@@ -29,16 +28,16 @@ def key_callback(window, key, scancode, action, mods, model, data):
         elif key == glfw.KEY_CAPS_LOCK:
             look_sahur = not look_sahur
         elif key == glfw.KEY_LEFT:
-            renderer.cam.azimuth -= 5
+            renderer.cam.azimuth -= 15
         elif key == glfw.KEY_RIGHT:
-            renderer.cam.azimuth += 5
+            renderer.cam.azimuth += 15
         elif key == glfw.KEY_UP:
-            renderer.cam.elevation -= 5
+            renderer.cam.elevation -= 15
         elif key == glfw.KEY_DOWN:
-            renderer.cam.elevation += 5
+            renderer.cam.elevation += 15
 
 def main():
-    global renderer
+    global renderer, score
     # Initialize glfw
     if not glfw.init():
         return
@@ -67,9 +66,38 @@ def main():
         # Clear forces
 
         # AI controller for villain
-        data.qfrc_applied[9] = np.random.uniform(-10, 10) * 250
-        data.qfrc_applied[10] = np.random.uniform(-10, 10) * 250
-        data.qfrc_applied[11] = np.random.uniform(-10, 10) * 250
+        # data.qfrc_applied[9] = np.random.uniform(-10, 10) * 250
+        # data.qfrc_applied[10] = np.random.uniform(-10, 10) * 250
+        # data.qfrc_applied[11] = np.random.uniform(-10, 10) * 250
+
+        hero_pos = data.qpos[0:2]
+        villain_pos = data.qpos[9:11]
+        direction = hero_pos - villain_pos
+        direction = direction / (np.linalg.norm(direction) + 1e-9)
+        # print(score)
+        data.qfrc_applied[8] = direction[0] * 500
+        data.qfrc_applied[9] = direction[1] * 500
+
+        # Check if hero reached target
+        hero_pos = data.qpos[0:2]
+        target_pos = model.body("target").pos[0:2]
+        dist = np.linalg.norm(hero_pos - target_pos)
+        if dist < 0.75:
+            score += 1
+            # Move target to a new random position
+            model.body("target").pos[0] = np.random.uniform(-5, 5)
+            model.body("target").pos[1] = np.random.uniform(-5, 5)
+
+        # Check if villain caught hero
+        villain_pos = data.qpos[9:11]
+        dist = np.linalg.norm(hero_pos - villain_pos)
+        if dist < 0.75:
+            score -= 0.001
+        # print(score)
+        if score <= -1 or score >=5:
+            mujoco.mj_resetData(model, data)
+            mujoco.mj_forward(model, data)
+            score = 0
 
         # Step the world
         mujoco.mj_step(model, data)
@@ -81,7 +109,7 @@ def main():
         else:
             renderer.cam.lookat[:] = [data.qpos[9], data.qpos[10], data.qpos[11]]
 
-        renderer.render(score)
+        renderer.render(round(score, 2))
 
     glfw.terminate()
 
