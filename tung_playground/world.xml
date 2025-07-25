@@ -1,4 +1,4 @@
 <mujoco>
-  <include file="../heroes/complexo/model.xml"/>
-  <include file="../heroes/villain/model.xml"/>
+  <include file="../heroes/tung_tung_sahur/model.xml"/>
+  <include file="../heroes/oleg/model.xml"/>
 </mujoco>
