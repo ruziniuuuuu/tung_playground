@@ -1,8 +1,12 @@
 <mujoco>
+  <asset>
+    <texture type="cube" name="villain_texture" file="D:\workspace\shitposts\tung_playground\heroes\villain\texture.png"/>
+    <material name="villain_material" texture="villain_texture"/>
+  </asset>
   <worldbody>
     <body name="villain" pos="0 0 1">
       <joint type="free"/>
-      <geom type="box" size=".2 .2 .2" rgba="1 0 0 1"/>
+      <geom type="box" size=".2 .2 .2" material="villain_material"/>
     </body>
   </worldbody>
 </mujoco>

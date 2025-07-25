@@ -13,14 +13,14 @@ def key_callback(window, key, scancode, action, mods, model, data):
             mujoco.mj_forward(model, data)
             score = 0
         elif key == glfw.KEY_W:
-            data.qfrc_applied[0] = 1000
+            data.qfrc_applied[0] = 500000
             score += 1
         elif key == glfw.KEY_S:
-            data.qfrc_applied[0] = -1000
+            data.qfrc_applied[0] = -500000
         elif key == glfw.KEY_A:
-            data.qfrc_applied[1] = 1000
+            data.qfrc_applied[1] = 500000
         elif key == glfw.KEY_D:
-            data.qfrc_applied[1] = -1000
+            data.qfrc_applied[1] = -500000
 
 def main():
     # Initialize glfw
@@ -49,7 +49,6 @@ def main():
 
     while not glfw.window_should_close(renderer.window):
         # Clear forces
-        data.qfrc_applied[:] = 0
 
         # AI controller for villain
         data.qfrc_applied[6] = np.random.uniform(-10, 10)
@@ -58,6 +57,7 @@ def main():
         # Step the world
         mujoco.mj_step(model, data)
 
+        data.qfrc_applied[:] = 0
         # Render the world
         renderer.render(score)
 
