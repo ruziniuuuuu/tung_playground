@@ -3,6 +3,7 @@ from tung_playground.hero import Hero
 from tung_playground.world import World
 from tung_playground.renderer import Renderer
 import numpy as np
+import mujoco
 
 score = 0
 
@@ -25,6 +26,20 @@ def key_callback(window, key, scancode, action, mods, world):
             world.datas[0].qfrc_applied[1] = -100
 
 def main():
+    # Initialize glfw
+    if not glfw.init():
+        return
+
+    # Create a window
+    window = glfw.create_window(1200, 900, "Tung Playground", None, None)
+    if not window:
+        glfw.terminate()
+        return
+
+    # Make the window's context current
+    glfw.make_context_current(window)
+    glfw.swap_interval(1)
+
     # Create the world
     world = World()
 
@@ -35,7 +50,7 @@ def main():
     world.add_hero(villain)
 
     # Create the renderer
-    renderer = Renderer(world)
+    renderer = Renderer(world, window)
 
     # Set key callback
     glfw.set_key_callback(renderer.window, lambda window, key, scancode, action, mods: key_callback(window, key, scancode, action, mods, world))
@@ -56,7 +71,7 @@ def main():
             data.qfrc_applied[:] = 0
 
 
-    renderer.close()
+    glfw.terminate()
 
 if __name__ == "__main__":
     main()

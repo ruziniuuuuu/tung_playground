@@ -2,22 +2,9 @@ import mujoco
 import glfw
 
 class Renderer:
-    def __init__(self, world):
+    def __init__(self, world, window):
         self.world = world
-
-        # Initialize glfw
-        if not glfw.init():
-            return
-
-        # Create a window
-        self.window = glfw.create_window(1200, 900, "Tung Playground", None, None)
-        if not self.window:
-            glfw.terminate()
-            return
-
-        # Make the window's context current
-        glfw.make_context_current(self.window)
-        glfw.swap_interval(1)
+        self.window = window
 
         # Initialize mujoco visualization
         self.cam = mujoco.MjvCamera()
@@ -41,13 +28,10 @@ class Renderer:
             mujoco.mjr_render(viewport, self.scn, self.con)
 
         # Add score to GUI
-        mujoco.mjr_text(self.con, mujoco.mjtFont.mjFONT_NORMAL, f"Score: {score}", 10, 10)
+        mujoco.mjr_text(mujoco.mjtFont.mjFONT_NORMAL, f"Score: {score}", self.con, 10, 10, 1, 1, 1)
 
         # Swap buffers
         glfw.swap_buffers(self.window)
 
         # Poll for and process events
         glfw.poll_events()
-
-    def close(self):
-        glfw.terminate()
