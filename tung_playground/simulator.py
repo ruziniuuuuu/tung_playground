@@ -13,14 +13,14 @@ def key_callback(window, key, scancode, action, mods, model, data):
             mujoco.mj_forward(model, data)
             score = 0
         elif key == glfw.KEY_W:
-            data.qfrc_applied[0] = 100
+            data.qfrc_applied[0] = 1000
             score += 1
         elif key == glfw.KEY_S:
-            data.qfrc_applied[0] = -100
+            data.qfrc_applied[0] = -1000
         elif key == glfw.KEY_A:
-            data.qfrc_applied[1] = 100
+            data.qfrc_applied[1] = 1000
         elif key == glfw.KEY_D:
-            data.qfrc_applied[1] = -100
+            data.qfrc_applied[1] = -1000
 
 def main():
     # Initialize glfw
