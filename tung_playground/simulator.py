@@ -21,6 +21,8 @@ def key_callback(window, key, scancode, action, mods, model, data):
             data.qfrc_applied[1] = 500000
         elif key == glfw.KEY_D:
             data.qfrc_applied[1] = -500000
+        elif key == glfw.KEY_SPACE:
+            data.qfrc_applied[2] = 500000
 
 def main():
     # Initialize glfw
@@ -51,8 +53,9 @@ def main():
         # Clear forces
 
         # AI controller for villain
-        data.qfrc_applied[6] = np.random.uniform(-10, 10)
-        data.qfrc_applied[7] = np.random.uniform(-10, 10)
+        data.qfrc_applied[8] = np.random.uniform(-10, 10) * 500
+        data.qfrc_applied[9] = np.random.uniform(-10, 10) * 500
+        data.qfrc_applied[10] = np.random.uniform(-10, 10) * 500
 
         # Step the world
         mujoco.mj_step(model, data)
