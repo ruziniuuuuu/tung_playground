@@ -3,7 +3,7 @@ import glfw
 from mujoco import viewer
 import numpy as np
 
-def key_callback(window, key, scancode, action, mods):
+def key_callback(window, key, scancode, action, mods, model, data):
     if action == glfw.PRESS and key == glfw.KEY_BACKSPACE:
         mujoco.mj_resetData(model, data)
         mujoco.mj_forward(model, data)
@@ -26,7 +26,7 @@ def main():
         v.cam.lookat[:] = [0.0, 0.0, 0.0]
 
         # Set key callback
-        glfw.set_key_callback(v.window, key_callback)
+        glfw.set_key_callback(v.window, lambda window, key, scancode, action, mods: key_callback(window, key, scancode, action, mods, model, data))
 
         while v.is_running():
             step_start = data.time
