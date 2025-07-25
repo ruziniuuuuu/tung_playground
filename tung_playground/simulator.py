@@ -1,12 +1,15 @@
 import glfw
+from tung_playground import renderer
 from tung_playground.renderer import Renderer
 import numpy as np
 import mujoco
 
 score = 0
+look_sahur = True
+renderer = None
 
 def key_callback(window, key, scancode, action, mods, model, data):
-    global score
+    global score, look_sahur, renderer
     if action == glfw.PRESS:
         if key == glfw.KEY_BACKSPACE:
             mujoco.mj_resetData(model, data)
@@ -23,8 +26,19 @@ def key_callback(window, key, scancode, action, mods, model, data):
             data.qfrc_applied[1] = -500000
         elif key == glfw.KEY_SPACE:
             data.qfrc_applied[2] = 500000
+        elif key == glfw.KEY_CAPS_LOCK:
+            look_sahur = not look_sahur
+        elif key == glfw.KEY_LEFT:
+            renderer.cam.azimuth -= 5
+        elif key == glfw.KEY_RIGHT:
+            renderer.cam.azimuth += 5
+        elif key == glfw.KEY_UP:
+            renderer.cam.elevation -= 5
+        elif key == glfw.KEY_DOWN:
+            renderer.cam.elevation += 5
 
 def main():
+    global renderer
     # Initialize glfw
     if not glfw.init():
         return
@@ -53,15 +67,20 @@ def main():
         # Clear forces
 
         # AI controller for villain
-        data.qfrc_applied[8] = np.random.uniform(-10, 10) * 500
-        data.qfrc_applied[9] = np.random.uniform(-10, 10) * 500
-        data.qfrc_applied[10] = np.random.uniform(-10, 10) * 500
+        data.qfrc_applied[9] = np.random.uniform(-10, 10) * 250
+        data.qfrc_applied[10] = np.random.uniform(-10, 10) * 250
+        data.qfrc_applied[11] = np.random.uniform(-10, 10) * 250
 
         # Step the world
         mujoco.mj_step(model, data)
 
         data.qfrc_applied[:] = 0
         # Render the world
+        if look_sahur:
+            renderer.cam.lookat[:] = [data.qpos[0], data.qpos[1], data.qpos[2]]
+        else:
+            renderer.cam.lookat[:] = [data.qpos[9], data.qpos[10], data.qpos[11]]
+
         renderer.render(score)
 
     glfw.terminate()
