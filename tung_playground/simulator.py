@@ -91,7 +91,7 @@ def main():
         # Check if villain caught hero
         villain_pos = data.qpos[9:11]
         dist = np.linalg.norm(hero_pos - villain_pos)
-        if dist < 0.75:
+        if dist < 0.9:
             score -= 0.001
         # print(score)
         if score <= -1 or score >=5:
