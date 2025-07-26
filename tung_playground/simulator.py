@@ -98,19 +98,19 @@ def main():
         hero_pos = data.qpos[0:2]
         target_pos = model.body("target").pos[0:2]
         dist = np.linalg.norm(hero_pos - target_pos)
-        if dist < 0.75:
+        if dist < 1:
             score += 1
             # Move target to a new random position
-            model.body("target").pos[0] = np.random.uniform(-5, 5)
-            model.body("target").pos[1] = np.random.uniform(-5, 5)
+            model.body("target").pos[0] = np.random.uniform(-10, 10)
+            model.body("target").pos[1] = np.random.uniform(-10, 10)
 
         # Check if villain caught hero
         villain_pos = data.qpos[9:11]
         dist = np.linalg.norm(hero_pos - villain_pos)
-        if dist < 0.9:
+        if dist < 1:
             score -= 0.001
         # print(score)
-        if score <= -1 or score >=5:
+        if score <= -1 or score >= 5:
             mujoco.mj_resetData(model, data)
             mujoco.mj_forward(model, data)
             score = 0
