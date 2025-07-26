@@ -122,23 +122,29 @@ def main():
     while not glfw.window_should_close(renderer.window):
         # --- Villain AI ---
 
-        # AI controller for villain
+        # Get current state of hero and villain
         hero_pos = data.qpos[0:2]
+        hero_vel = data.qvel[0:2]
+
         villain_pos = data.qpos[9:11]
-        
-        # Calculate distance and direction from villain to hero
-        direction_vector = hero_pos - villain_pos
-        distance = np.linalg.norm(direction_vector)
-        direction_normalized = direction_vector / (distance + 1e-9)
+        villain_vel = data.qvel[8:9]
 
-        # Make villain faster when far away
-        base_force = 500  # The villain's base speed
-        distance_gain = 500  # How much faster the villain gets with distance
-        dynamic_force = base_force + distance * distance_gain
+        # --- PD Controller Gains ---
+        kp = 1000  # Proportional gain
+        kd = 250   # Derivative gain
 
-        # Apply force to move the villain towards the hero
-        data.qfrc_applied[8] = direction_normalized[0] * dynamic_force
-        data.qfrc_applied[9] = direction_normalized[1] * dynamic_force
+        # --- PD Control Law ---
+        error_pos = hero_pos - villain_pos
+        error_vel = hero_vel - villain_vel
+
+        # The total force is the sum of the spring force and the damping force.
+        # This ensures the villain is always pulled towards the hero while
+        # intelligently adjusting its speed.
+        force = kp * error_pos + kd * error_vel
+
+        # Apply the calculated force to the villain
+        data.qfrc_applied[8] = force[0]
+        data.qfrc_applied[9] = force[1]
 
         # --- Game Logic ---
 
@@ -154,7 +160,7 @@ def main():
         # Check if villain caught hero
         dist_to_villain = np.linalg.norm(hero_pos - villain_pos)
         if dist_to_villain < 1:
-            score -= 0.005
+            score -= 0.001
         
         # Reset if score is out of bounds
         if score < 0 or score >= 5:
@@ -169,7 +175,7 @@ def main():
         if look_sahur:
             renderer.cam.lookat[:] = [data.qpos[0], data.qpos[1], data.qpos[2]]
         else:
-            renderer.cam.lookat[:] = [data.qpos[8], data.qpos[9], data.qpos[10]]
+            renderer.cam.lookat[:] = [data.qpos[9], data.qpos[10], data.qpos[11]]
 
         renderer.render(round(score, 2))
 
