@@ -1,6 +1,6 @@
 <mujoco>
   <asset>
-    <texture type="cube" name="villain_texture" file="D:\workspace\shitposts\tung_playground\heroes\oleg\texture.png"/>
+    <texture type="cube" name="villain_texture" file="/home/artalmaz31/tung_playground/heroes/oleg/texture.png"/>
     <material name="villain_material" texture="villain_texture"/>
   </asset>
   <worldbody>
