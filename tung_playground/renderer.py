@@ -37,11 +37,7 @@ class Renderer:
 
         mujoco.mjv_updateScene(self.model, self.data, self.opt, None, self.cam, mujoco.mjtCatBit.mjCAT_ALL, self.scn)
         mujoco.mjr_render(viewport, self.scn, self.con)
-
-        # Add score to GUI
-        # mujoco.mjr_text(mujoco.mjtFont.mjFONT_NORMAL, f"Score: {score}", self.con, 10, 10, 1, 1, 1)
         mujoco.mjr_text(mujoco.mjtFont.mjFONT_NORMAL, f"Score: {score}", self.con, 0, 0, 1, 1, 1)
-
 
         # Swap buffers
         glfw.swap_buffers(self.window)
