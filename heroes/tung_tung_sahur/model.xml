@@ -1,7 +1,7 @@
 <mujoco>
   <asset>
-    <texture type="cube" name="hero_body_texture" file="D:\workspace\shitposts\tung_playground\heroes\tung_tung_sahur\body.png"/>
-    <texture type="cube" name="hero_leg_texture" file="D:\workspace\shitposts\tung_playground\heroes\tung_tung_sahur\leg.png"/>
+    <texture type="cube" name="hero_body_texture" file="/home/artalmaz31/tung_playground/heroes/tung_tung_sahur/body.png"/>
+    <texture type="cube" name="hero_leg_texture" file="/home/artalmaz31/tung_playground/heroes/tung_tung_sahur/leg.png"/>
     <material name="hero_body_material" texture="hero_body_texture"/>
     <material name="hero_leg_material" texture="hero_leg_texture"/>
   </asset>

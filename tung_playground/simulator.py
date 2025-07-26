@@ -15,26 +15,42 @@ def key_callback(window, key, scancode, action, mods, model, data):
             mujoco.mj_resetData(model, data)
             mujoco.mj_forward(model, data)
             score = 0
-        elif key == glfw.KEY_W:
-            data.qfrc_applied[0] = 500000
-        elif key == glfw.KEY_S:
-            data.qfrc_applied[0] = -500000
-        elif key == glfw.KEY_A:
-            data.qfrc_applied[1] = 500000
-        elif key == glfw.KEY_D:
-            data.qfrc_applied[1] = -500000
-        elif key == glfw.KEY_SPACE:
-            data.qfrc_applied[2] = 500000
-        elif key == glfw.KEY_CAPS_LOCK:
-            look_sahur = not look_sahur
-        elif key == glfw.KEY_LEFT:
-            renderer.cam.azimuth -= 15
-        elif key == glfw.KEY_RIGHT:
-            renderer.cam.azimuth += 15
-        elif key == glfw.KEY_UP:
-            renderer.cam.elevation -= 15
-        elif key == glfw.KEY_DOWN:
-            renderer.cam.elevation += 15
+        else:
+            # Get camera azimuth in radians
+            azimuth_rad = np.deg2rad(renderer.cam.azimuth)
+            
+            # Calculate forward and right vectors based on camera direction
+            forward_x = np.cos(azimuth_rad)
+            forward_y = np.sin(azimuth_rad)
+            right_x = -np.sin(azimuth_rad)
+            right_y = np.cos(azimuth_rad)
+
+            force_magnitude = 500000
+
+            if key == glfw.KEY_W:
+                data.qfrc_applied[0] = force_magnitude * forward_x
+                data.qfrc_applied[1] = force_magnitude * forward_y
+            elif key == glfw.KEY_S:
+                data.qfrc_applied[0] = -force_magnitude * forward_x
+                data.qfrc_applied[1] = -force_magnitude * forward_y
+            elif key == glfw.KEY_A:
+                data.qfrc_applied[0] = force_magnitude * right_x
+                data.qfrc_applied[1] = force_magnitude * right_y
+            elif key == glfw.KEY_D:
+                data.qfrc_applied[0] = -force_magnitude * right_x
+                data.qfrc_applied[1] = -force_magnitude * right_y
+            elif key == glfw.KEY_SPACE:
+                data.qfrc_applied[2] = 500000
+            elif key == glfw.KEY_CAPS_LOCK:
+                look_sahur = not look_sahur
+            elif key == glfw.KEY_LEFT:
+                renderer.cam.azimuth -= 15
+            elif key == glfw.KEY_RIGHT:
+                renderer.cam.azimuth += 15
+            elif key == glfw.KEY_UP:
+                renderer.cam.elevation -= 15
+            elif key == glfw.KEY_DOWN:
+                renderer.cam.elevation += 15
 
 def main():
     global renderer, score
