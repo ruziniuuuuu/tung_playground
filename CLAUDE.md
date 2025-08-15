@@ -33,11 +33,24 @@ Tung Playground is a Python project that enables AI-generated heroes to live in 
 
 ## Architecture Notes
 
-The project follows a standard Python package structure with:
-- Package metadata and dependencies managed via `pyproject.toml`
-- Source code organized under `src/` layout
-- Heroes stored as separate entities in the `heroes/` directory
-- Version management through `__init__.py`
+The project implements a complete AIGC hero simulation pipeline: **Image → 3D Mesh → Part Decomposition → Skeleton → URDF → MuJoCo/Isaac Lab → RL Policy**
+
+### Framework Components
+- **Core System**: Hero data model, pipeline orchestration, plugin registry
+- **Generation Module**: Image-to-3D conversion (Wonder3D, commercial APIs)
+- **Decomposition Module**: 3D mesh part decomposition (PartCrafter integration)
+- **Rigging Module**: Automatic skeleton generation and binding
+- **URDF Module**: Robot description file generation with physics properties
+- **Simulation Module**: MuJoCo and Isaac Lab integration adapters
+- **Training Module**: Reinforcement learning policy training framework
+- **Utils Module**: Configuration management, logging, validation, file operations
+
+### Key Design Principles
+- **Modular Pipeline**: Each stage is independently replaceable via plugin system
+- **Configuration-Driven**: YAML-based hierarchical configuration with stage-specific settings
+- **Async Execution**: Full async support with retry logic and batch processing
+- **Type Safety**: Comprehensive type hints and Pydantic data validation
+- **Extensibility**: Plugin architecture allows easy addition of new algorithms
 
 ## Code Style Guidelines
 
@@ -116,6 +129,12 @@ from tung_playground.utils import validation
 
 ## Development Workflow
 
+### Git Commit Strategy
+- **Feature-based commits**: Group related changes into logical commits
+- **Descriptive messages**: Use clear, concise English commit messages
+- **Atomic commits**: Each commit should be a complete, working unit
+- **No monolithic commits**: Split large changes into focused commits
+
 ### Code Review Checklist
 - [ ] Google-style docstrings present and complete
 - [ ] Type hints on all function signatures
@@ -124,3 +143,16 @@ from tung_playground.utils import validation
 - [ ] Error handling appropriate for context
 - [ ] No hardcoded values (use configuration)
 - [ ] Extensible design that allows future modifications
+- [ ] Plugin registration for new pipeline stages
+- [ ] Configuration schema updates for new features
+- [ ] Input/output validation implemented
+
+### Development Preferences
+- **Prefer composition over inheritance** for flexibility
+- **Use dependency injection** for external services and components
+- **Implement comprehensive logging** at appropriate levels
+- **Write defensive code** with proper validation and error handling
+- **Design for testability** with clear interfaces and mockable dependencies
+- **Follow async/await patterns** for I/O bound operations
+- **Use dataclasses/Pydantic models** for structured data
+- **Implement plugin patterns** for extensible architectures
