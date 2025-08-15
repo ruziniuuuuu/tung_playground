@@ -36,6 +36,23 @@ stages:
       poll_interval: 10  # seconds
       max_wait_time: 1800  # 30 minutes
     
+    # Tripo3D configuration
+    tripo:
+      # API key should be set via environment variable FAL_KEY (recommended) or TRIPO_API_KEY
+      # or in a custom config file (not committed to git)
+      # Get your key at: https://platform.tripo3d.ai/api-keys
+      api_key: null
+      base_url: "https://fal.run/tripo3d/tripo/v2.5/image-to-3d"
+      texture_quality: "standard"  # "no", "standard", "HD"
+      face_limit: 10000
+      enable_pbr: false
+      enable_quad: false
+      auto_size: true
+      style: null  # e.g., "object:clay", "person:person2cartoon"
+      seed: null
+      poll_interval: 5  # seconds
+      max_wait_time: 600  # 10 minutes
+    
   decomposition:
     min_parts: 2
     max_parts: 20

@@ -6,10 +6,12 @@ This module handles converting input images to 3D meshes using various AIGC appr
 from .base import Image3DGenerator, GenerationResult
 from .mock_generator import MockGenerator
 from .meshy_generator import MeshyGenerator
+from .tripo_generator import TripoGenerator
 
 __all__ = [
     "Image3DGenerator",
     "GenerationResult",
     "MockGenerator",
     "MeshyGenerator",
+    "TripoGenerator",
 ]

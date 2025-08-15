@@ -1,0 +1,21 @@
+{
+  "id": "15f24075-db22-4a4f-b0fc-83607ea6e0d2",
+  "name": "tungtung_sahur_tripo",
+  "description": null,
+  "status": "created",
+  "created_at": "2025-08-15 20:57:07.602489",
+  "updated_at": "2025-08-15 20:57:07.602493",
+  "assets": {
+    "input_image": "heroes/tungtungtungtungtungtungtungtungtung_sahur/image.png",
+    "mesh_3d": null,
+    "parts": null,
+    "skeleton": null,
+    "urdf": null,
+    "simulation_model": null,
+    "trained_policy": null,
+    "metadata": {}
+  },
+  "hero_dir": "heroes/tungtungtungtungtungtungtungtungtung_sahur",
+  "config": {},
+  "processing_log": []
+}
