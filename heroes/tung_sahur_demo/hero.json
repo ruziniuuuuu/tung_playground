@@ -1,0 +1,89 @@
+{
+  "id": "hero_123456",
+  "name": "tung_sahur_demo",
+  "status": "ready",
+  "created_at": "2025-01-15T12:00:00",
+  "updated_at": "2025-01-15T12:05:30",
+  "assets": {
+    "input_image": "input_image.png",
+    "mesh_3d": "generated_mesh.obj",
+    "parts": [
+      "parts/head.obj",
+      "parts/torso.obj",
+      "parts/arms.obj",
+      "parts/legs.obj"
+    ],
+    "skeleton": "skeleton.json",
+    "urdf": "robot.urdf",
+    "simulation_model": "scene.xml",
+    "trained_policy": "policy.pkl",
+    "metadata": {
+      "generation": {
+        "generator": "mock_generator",
+        "quality_score": 0.85,
+        "vertices": 156,
+        "faces": 280
+      },
+      "decomposition": {
+        "decomposer": "mock_decomposer",
+        "part_count": 4,
+        "method": "semantic_splitting"
+      },
+      "rigging": {
+        "rigger": "mock_rigger",
+        "joint_count": 20,
+        "bone_count": 19,
+        "skeleton_type": "biped"
+      },
+      "urdf": {
+        "generator": "mock_urdf_builder",
+        "link_count": 20,
+        "joint_count": 19,
+        "physics_engine": "mujoco"
+      },
+      "simulation": {
+        "adapter": "mock_mujoco_adapter",
+        "environment_type": "mujoco",
+        "timestep": 0.002
+      },
+      "training": {
+        "trainer": "mock_trainer",
+        "algorithm": "ppo",
+        "training_episodes": 100,
+        "final_reward": 342.5
+      }
+    }
+  },
+  "processing_log": [
+    {
+      "timestamp": "2025-01-15T12:00:00",
+      "stage": "generation",
+      "message": "3D mesh generated successfully"
+    },
+    {
+      "timestamp": "2025-01-15T12:01:00",
+      "stage": "decomposition",
+      "message": "Mesh decomposed into 4 parts"
+    },
+    {
+      "timestamp": "2025-01-15T12:02:00",
+      "stage": "rigging",
+      "message": "Biped skeleton generated with 20 joints"
+    },
+    {
+      "timestamp": "2025-01-15T12:03:00",
+      "stage": "urdf",
+      "message": "URDF generated with complete robot description"
+    },
+    {
+      "timestamp": "2025-01-15T12:04:00",
+      "stage": "simulation",
+      "message": "MuJoCo scene created successfully"
+    },
+    {
+      "timestamp": "2025-01-15T12:05:30",
+      "stage": "training",
+      "message": "RL policy trained with final reward: 342.5"
+    }
+  ]
+}

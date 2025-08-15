@@ -1,12 +1,10 @@
 """Simulation integration module."""
 
 from .base import SimulationAdapter, SimulationResult
-from .mujoco_adapter import MuJoCoAdapter
-from .isaac_adapter import IsaacLabAdapter
+from .mock_mujoco import MockMuJoCoAdapter
 
 __all__ = [
     "SimulationAdapter",
     "SimulationResult",
-    "MuJoCoAdapter", 
-    "IsaacLabAdapter",
+    "MockMuJoCoAdapter",
 ]

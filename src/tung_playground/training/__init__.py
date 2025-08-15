@@ -1,10 +1,10 @@
 """RL training module."""
 
 from .base import PolicyTrainer, TrainingResult
-from .trainers import PPOTrainer
+from .mock_trainer import MockTrainer
 
 __all__ = [
     "PolicyTrainer",
     "TrainingResult",
-    "PPOTrainer",
+    "MockTrainer",
 ]

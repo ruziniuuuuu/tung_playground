@@ -1,10 +1,10 @@
 """Skeleton generation and rigging module."""
 
 from .base import AutoRigger, RiggingResult
-from .auto_rigger import TemplateAutoRigger
+from .mock_rigger import MockRigger
 
 __all__ = [
     "AutoRigger", 
     "RiggingResult",
-    "TemplateAutoRigger",
+    "MockRigger",
 ]

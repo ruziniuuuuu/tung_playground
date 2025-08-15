@@ -1,10 +1,10 @@
 """URDF generation module."""
 
 from .base import URDFGenerator, URDFResult
-from .builder import StandardURDFBuilder
+from .mock_builder import MockURDFBuilder
 
 __all__ = [
     "URDFGenerator",
     "URDFResult", 
-    "StandardURDFBuilder",
+    "MockURDFBuilder",
 ]

@@ -1,0 +1,59 @@
+[book]
+authors = ["Chenyu Cao"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Tung Playground Documentation"
+description = "Complete documentation for the AIGC Hero Simulation Framework"
+
+[rust]
+edition = "2021"
+
+[build]
+build-dir = "book"
+create-missing = true
+preprocess = ["links"]
+use-default-preprocessors = true
+
+[preprocessor.links]
+
+[output.html]
+additional-css = ["src/theme/custom.css"]
+additional-js = ["src/theme/custom.js"]
+smart-punctuation = true
+mathjax-support = false
+copy-fonts = true
+git-repository-url = "https://github.com/ruziniuuuuu/tung_playground"
+edit-url-template = "https://github.com/ruziniuuuuu/tung_playground/edit/main/docs/src/{path}"
+site-url = "/tung_playground/"
+cname = ""
+
+[output.html.playground]
+copyable = true
+editable = false
+copy-js = true
+line-numbers = false
+runnable = false
+
+[output.html.search]
+enable = true
+limit-results = 30
+teaser-word-count = 30
+use-boolean-and = true
+boost-title = 2
+boost-hierarchy = 1
+boost-paragraph = 1
+expand = true
+heading-split-level = 3
+copy-js = true
+
+[output.html.print]
+enable = true
+page-break = true
+
+[output.html.fold]
+enable = false
+level = 0
+
+[output.linkcheck]
+optional = true

@@ -1,10 +1,10 @@
 """Part decomposition module for 3D meshes."""
 
 from .base import PartDecomposer, DecompositionResult
-from .partcrafter import PartCrafterDecomposer
+from .mock_decomposer import MockDecomposer
 
 __all__ = [
     "PartDecomposer",
     "DecompositionResult",
-    "PartCrafterDecomposer",
+    "MockDecomposer",
 ]
