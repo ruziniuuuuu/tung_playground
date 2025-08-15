@@ -13,7 +13,22 @@ dynamic = ["version"]
 readme = {file = "README.md", content-type = "text/markdown"}
 requires-python = ">=3.10"
 dependencies = [
-    "mujoco"
+    "mujoco",
+    "numpy",
+    "opencv-python",
+    "pillow",
+    "pyyaml",
+    "trimesh",
+    "open3d",
+    "scipy",
+    "pydantic>=2.0",
+    "rich",
+    "typer",
+    "requests",
+    "aiohttp",
+    "asyncio-mqtt",
+    "pathlib",
+    "dataclasses-json"
 ]
 license-files = ["LICENSE"]
 authors = [
@@ -24,7 +39,31 @@ maintainers = [
 ]
 keywords = [
     "mujoco",
-    "robotics"
+    "robotics",
+    "3d-generation",
+    "aigc",
+    "simulation",
+    "reinforcement-learning"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "black",
+    "isort",
+    "mypy",
+    "pre-commit"
+]
+ml = [
+    "torch",
+    "torchvision",
+    "transformers",
+    "diffusers",
+    "accelerate"
+]
+isaac = [
+    "omni-isaac-lab"
 ]
 
 [tool.hatch.version]
