@@ -1,89 +1,146 @@
 {
-  "id": "hero_123456",
+  "id": "3e225f31-26f9-4812-b1da-eb29830b14b6",
   "name": "tung_sahur_demo",
-  "status": "ready",
-  "created_at": "2025-01-15T12:00:00",
-  "updated_at": "2025-01-15T12:05:30",
+  "description": null,
+  "status": "created",
+  "created_at": "2025-08-15 14:12:21.823051",
+  "updated_at": "2025-08-15 14:12:27.194409",
   "assets": {
-    "input_image": "input_image.png",
-    "mesh_3d": "generated_mesh.obj",
+    "input_image": "heroes/tungtungtungtungtungtungtungtungtung_sahur/image.png",
+    "mesh_3d": "heroes/tung_sahur_demo/generated_mesh.obj",
     "parts": [
-      "parts/head.obj",
-      "parts/torso.obj",
-      "parts/arms.obj",
-      "parts/legs.obj"
+      "heroes/tung_sahur_demo/parts/head.obj",
+      "heroes/tung_sahur_demo/parts/torso.obj",
+      "heroes/tung_sahur_demo/parts/arms.obj",
+      "heroes/tung_sahur_demo/parts/legs.obj"
     ],
-    "skeleton": "skeleton.json",
-    "urdf": "robot.urdf",
-    "simulation_model": "scene.xml",
-    "trained_policy": "policy.pkl",
+    "skeleton": "heroes/tung_sahur_demo/skeleton.json",
+    "urdf": "heroes/tung_sahur_demo/robot.urdf",
+    "simulation_model": "heroes/tung_sahur_demo/scene.xml",
+    "trained_policy": "heroes/tung_sahur_demo/policy.pkl",
     "metadata": {
       "generation": {
-        "generator": "mock_generator",
+        "generator": "generation",
         "quality_score": 0.85,
+        "generation_time": 1.0008976459503174,
+        "method": "procedural_humanoid",
+        "scale": 1.0,
         "vertices": 156,
-        "faces": 280
+        "faces": 280,
+        "input_image_size": [
+          315,
+          315
+        ]
       },
       "decomposition": {
-        "decomposer": "mock_decomposer",
+        "decomposer": "decomposition",
         "part_count": 4,
-        "method": "semantic_splitting"
+        "part_names": [
+          "head",
+          "torso",
+          "arms",
+          "legs"
+        ],
+        "decomposition_time": 0.8008334636688232,
+        "method": "semantic_splitting",
+        "original_vertices": 24,
+        "parts_created": 4,
+        "parts_dir": "heroes/tung_sahur_demo/parts"
       },
       "rigging": {
-        "rigger": "mock_rigger",
-        "joint_count": 20,
-        "bone_count": 19,
-        "skeleton_type": "biped"
+        "rigger": "rigging",
+        "joint_count": 22,
+        "bone_count": 21,
+        "rigging_time": 0.6006326675415039,
+        "skeleton_type": "biped",
+        "auto_detected": true,
+        "symmetry_applied": true,
+        "parts_analyzed": 4
       },
       "urdf": {
-        "generator": "mock_urdf_builder",
-        "link_count": 20,
-        "joint_count": 19,
-        "physics_engine": "mujoco"
+        "generator": "urdf",
+        "link_count": 22,
+        "joint_count": 21,
+        "physics_engine": "mujoco",
+        "generation_time": 0.5008227825164795,
+        "robot_name": "tung_hero",
+        "collision_generated": true,
+        "mesh_decimation": 0.5,
+        "skeleton_type": "biped"
       },
       "simulation": {
-        "adapter": "mock_mujoco_adapter",
+        "adapter": "simulation",
         "environment_type": "mujoco",
-        "timestep": 0.002
+        "physics_timestep": 0.002,
+        "setup_time": 0.4007236957550049,
+        "physics_engine": "mujoco",
+        "scene_type": "basic_ground",
+        "timestep": 0.002,
+        "urdf_included": true
       },
       "training": {
-        "trainer": "mock_trainer",
+        "trainer": "training",
         "algorithm": "ppo",
         "training_episodes": 100,
-        "final_reward": 342.5
+        "final_reward": 283.2864727780884,
+        "training_time": 2.0025572776794434,
+        "learning_rate": 0.0003,
+        "total_timesteps": 1000000,
+        "policy_type": "random",
+        "convergence_achieved": true
       }
     }
   },
+  "hero_dir": "heroes/tung_sahur_demo",
+  "config": {},
   "processing_log": [
     {
-      "timestamp": "2025-01-15T12:00:00",
+      "timestamp": "2025-08-15 14:12:21.836926",
+      "stage": "pipeline",
+      "message": "Started pipeline: default",
+      "details": {}
+    },
+    {
+      "timestamp": "2025-08-15 14:12:22.865397",
       "stage": "generation",
-      "message": "3D mesh generated successfully"
+      "message": "Stage completed successfully in 1.00s",
+      "details": {}
     },
     {
-      "timestamp": "2025-01-15T12:01:00",
+      "timestamp": "2025-08-15 14:12:23.668256",
       "stage": "decomposition",
-      "message": "Mesh decomposed into 4 parts"
+      "message": "Stage completed successfully in 0.80s",
+      "details": {}
     },
     {
-      "timestamp": "2025-01-15T12:02:00",
+      "timestamp": "2025-08-15 14:12:24.270431",
       "stage": "rigging",
-      "message": "Biped skeleton generated with 20 joints"
+      "message": "Stage completed successfully in 0.60s",
+      "details": {}
     },
     {
-      "timestamp": "2025-01-15T12:03:00",
+      "timestamp": "2025-08-15 14:12:24.786149",
       "stage": "urdf",
-      "message": "URDF generated with complete robot description"
+      "message": "Stage completed successfully in 0.50s",
+      "details": {}
     },
     {
-      "timestamp": "2025-01-15T12:04:00",
+      "timestamp": "2025-08-15 14:12:25.189146",
       "stage": "simulation",
-      "message": "MuJoCo scene created successfully"
+      "message": "Stage completed successfully in 0.40s",
+      "details": {}
     },
     {
-      "timestamp": "2025-01-15T12:05:30",
+      "timestamp": "2025-08-15 14:12:27.193831",
       "stage": "training",
-      "message": "RL policy trained with final reward: 342.5"
+      "message": "Stage completed successfully in 2.00s",
+      "details": {}
+    },
+    {
+      "timestamp": "2025-08-15 14:12:27.194407",
+      "stage": "pipeline",
+      "message": "Pipeline default completed successfully",
+      "details": {}
     }
   ]
 }

@@ -209,7 +209,7 @@ class MockURDFBuilder(URDFGenerator):
         # Close robot tag
         urdf_lines.append('</robot>')
         
-        return '\\n'.join(urdf_lines)
+        return '\n'.join(urdf_lines)
     
     def _calculate_inertia_matrix(self, mass: float, dimensions: List[float]) -> Dict[str, float]:
         """Calculate inertia matrix for a box.

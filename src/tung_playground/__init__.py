@@ -41,6 +41,13 @@ from .plugins import (
     list_plugins,
 )
 
+# Visualization (optional)
+try:
+    from .visualization import URDFVisualizer
+    VISUALIZATION_AVAILABLE = True
+except ImportError:
+    VISUALIZATION_AVAILABLE = False
+
 # Main modules (import on demand to avoid circular imports)
 __all__ = [
     # Core
@@ -69,9 +76,15 @@ __all__ = [
     "register_plugin",
     "get_plugin",
     "list_plugins",
+    # Visualization
+    "VISUALIZATION_AVAILABLE",
     # Version
     "__version__",
 ]
+
+# Add URDFVisualizer to __all__ if available
+if VISUALIZATION_AVAILABLE:
+    __all__.append("URDFVisualizer")
 
 
 def create_hero(name: str, image_path: str, hero_dir: str = None) -> Hero:

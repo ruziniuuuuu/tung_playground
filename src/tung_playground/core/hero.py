@@ -71,8 +71,21 @@ class HeroAssets:
         Returns:
             True if asset exists and file is present, False otherwise.
         """
-        asset_path = self.get_asset(asset_type)
-        return asset_path is not None and asset_path.exists()
+        asset_data = self.get_asset(asset_type)
+        if asset_data is None:
+            return False
+        
+        # Handle list of paths (like PARTS)
+        if isinstance(asset_data, list):
+            return len(asset_data) > 0 and all(
+                isinstance(path, Path) and path.exists() for path in asset_data
+            )
+        
+        # Handle single path
+        if isinstance(asset_data, Path):
+            return asset_data.exists()
+            
+        return False
 
 
 class Hero(BaseModel):
@@ -261,3 +274,33 @@ class Hero(BaseModel):
             data = json.load(f)
         
         return cls.from_dict(data)
+    
+    def visualize(self, port: int = 8080, host: str = "localhost", blocking: bool = True):
+        """Visualize the hero's URDF model interactively.
+        
+        Args:
+            port: Port for the visualization server.
+            host: Host address for the visualization server.
+            blocking: Whether to block the main thread.
+            
+        Returns:
+            URDFVisualizer instance if visualization is available.
+            
+        Raises:
+            ImportError: If visualization dependencies are not installed.
+            ValueError: If hero doesn't have a URDF asset.
+        """
+        try:
+            from ..visualization import URDFVisualizer
+        except ImportError:
+            raise ImportError(
+                "Visualization dependencies not found. Install with: pip install tung_playground[vis]"
+            )
+        
+        if not self.assets.has_asset(AssetType.URDF):
+            raise ValueError(f"Hero {self.name} does not have a URDF asset for visualization")
+        
+        visualizer = URDFVisualizer(port=port, host=host)
+        visualizer.load_hero(self)
+        visualizer.run(blocking=blocking)
+        return visualizer

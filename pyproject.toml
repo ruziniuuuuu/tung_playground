@@ -62,8 +62,12 @@ ml = [
     "diffusers",
     "accelerate"
 ]
+vis = [
+    "viser",
+    "yourdfpy"
+]
 isaac = [
-    "omni-isaac-lab"
+    # "omni-isaac-lab"  # Commented out - not available in package registry
 ]
 
 [tool.hatch.version]

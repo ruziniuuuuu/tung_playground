@@ -1,10 +1,15 @@
 {
   "skeleton_type": "biped",
-  "joint_count": 20,
-  "bone_count": 19,
+  "joint_count": 22,
+  "bone_count": 21,
   "joints": {
     "root": {
       "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
         0.0,
         0.0,
         0.0
@@ -20,6 +25,11 @@
         0.8,
         0.0
       ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
       "parent": "root",
       "children": [
         "spine",
@@ -33,6 +43,11 @@
         1.0,
         0.0
       ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
       "parent": "pelvis",
       "children": [
         "chest"
@@ -42,6 +57,11 @@
       "position": [
         0.0,
         1.2,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
         0.0
       ],
       "parent": "spine",
@@ -57,6 +77,11 @@
         1.5,
         0.0
       ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
       "parent": "chest",
       "children": [
         "head"
@@ -68,6 +93,11 @@
         1.7,
         0.0
       ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
       "parent": "neck",
       "children": []
     },
@@ -75,6 +105,11 @@
       "position": [
         -0.2,
         1.3,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
         0.0
       ],
       "parent": "chest",
@@ -88,6 +123,11 @@
         1.1,
         0.0
       ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
       "parent": "left_shoulder",
       "children": [
         "left_lower_arm"
@@ -97,6 +137,11 @@
       "position": [
         -0.3,
         0.7,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
         0.0
       ],
       "parent": "left_upper_arm",
@@ -110,6 +155,11 @@
         0.4,
         0.0
       ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
       "parent": "left_lower_arm",
       "children": []
     },
@@ -117,6 +167,11 @@
       "position": [
         0.2,
         1.3,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
         0.0
       ],
       "parent": "chest",
@@ -130,6 +185,11 @@
         1.1,
         0.0
       ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
       "parent": "right_shoulder",
       "children": [
         "right_lower_arm"
@@ -139,6 +199,11 @@
       "position": [
         0.3,
         0.7,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
         0.0
       ],
       "parent": "right_upper_arm",
@@ -152,6 +217,11 @@
         0.4,
         0.0
       ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
       "parent": "right_lower_arm",
       "children": []
     },
@@ -159,6 +229,11 @@
       "position": [
         -0.1,
         0.7,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
         0.0
       ],
       "parent": "pelvis",
@@ -172,6 +247,11 @@
         0.4,
         0.0
       ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
       "parent": "left_hip",
       "children": [
         "left_lower_leg"
@@ -180,6 +260,11 @@
     "left_lower_leg": {
       "position": [
         -0.1,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
         0.0,
         0.0
       ],
@@ -194,6 +279,11 @@
         -0.3,
         0.0
       ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
       "parent": "left_lower_leg",
       "children": []
     },
@@ -201,6 +291,11 @@
       "position": [
         0.1,
         0.7,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
         0.0
       ],
       "parent": "pelvis",
@@ -214,6 +309,11 @@
         0.4,
         0.0
       ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
       "parent": "right_hip",
       "children": [
         "right_lower_leg"
@@ -222,6 +322,11 @@
     "right_lower_leg": {
       "position": [
         0.1,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
         0.0,
         0.0
       ],
@@ -236,10 +341,143 @@
         -0.3,
         0.0
       ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0
+      ],
       "parent": "right_lower_leg",
       "children": []
     }
   },
+  "bones": [
+    {
+      "name": "root_to_pelvis",
+      "start_joint": "root",
+      "end_joint": "pelvis",
+      "length": 0.8
+    },
+    {
+      "name": "pelvis_to_spine",
+      "start_joint": "pelvis",
+      "end_joint": "spine",
+      "length": 0.19999999999999996
+    },
+    {
+      "name": "spine_to_chest",
+      "start_joint": "spine",
+      "end_joint": "chest",
+      "length": 0.19999999999999996
+    },
+    {
+      "name": "chest_to_neck",
+      "start_joint": "chest",
+      "end_joint": "neck",
+      "length": 0.30000000000000004
+    },
+    {
+      "name": "neck_to_head",
+      "start_joint": "neck",
+      "end_joint": "head",
+      "length": 0.19999999999999996
+    },
+    {
+      "name": "chest_to_left_shoulder",
+      "start_joint": "chest",
+      "end_joint": "left_shoulder",
+      "length": 0.22360679774997902
+    },
+    {
+      "name": "left_shoulder_to_left_upper_arm",
+      "start_joint": "left_shoulder",
+      "end_joint": "left_upper_arm",
+      "length": 0.2236067977499789
+    },
+    {
+      "name": "left_upper_arm_to_left_lower_arm",
+      "start_joint": "left_upper_arm",
+      "end_joint": "left_lower_arm",
+      "length": 0.40000000000000013
+    },
+    {
+      "name": "left_lower_arm_to_left_hand",
+      "start_joint": "left_lower_arm",
+      "end_joint": "left_hand",
+      "length": 0.29999999999999993
+    },
+    {
+      "name": "chest_to_right_shoulder",
+      "start_joint": "chest",
+      "end_joint": "right_shoulder",
+      "length": 0.22360679774997902
+    },
+    {
+      "name": "right_shoulder_to_right_upper_arm",
+      "start_joint": "right_shoulder",
+      "end_joint": "right_upper_arm",
+      "length": 0.2236067977499789
+    },
+    {
+      "name": "right_upper_arm_to_right_lower_arm",
+      "start_joint": "right_upper_arm",
+      "end_joint": "right_lower_arm",
+      "length": 0.40000000000000013
+    },
+    {
+      "name": "right_lower_arm_to_right_hand",
+      "start_joint": "right_lower_arm",
+      "end_joint": "right_hand",
+      "length": 0.29999999999999993
+    },
+    {
+      "name": "pelvis_to_left_hip",
+      "start_joint": "pelvis",
+      "end_joint": "left_hip",
+      "length": 0.14142135623730956
+    },
+    {
+      "name": "left_hip_to_left_upper_leg",
+      "start_joint": "left_hip",
+      "end_joint": "left_upper_leg",
+      "length": 0.29999999999999993
+    },
+    {
+      "name": "left_upper_leg_to_left_lower_leg",
+      "start_joint": "left_upper_leg",
+      "end_joint": "left_lower_leg",
+      "length": 0.4
+    },
+    {
+      "name": "left_lower_leg_to_left_foot",
+      "start_joint": "left_lower_leg",
+      "end_joint": "left_foot",
+      "length": 0.3
+    },
+    {
+      "name": "pelvis_to_right_hip",
+      "start_joint": "pelvis",
+      "end_joint": "right_hip",
+      "length": 0.14142135623730956
+    },
+    {
+      "name": "right_hip_to_right_upper_leg",
+      "start_joint": "right_hip",
+      "end_joint": "right_upper_leg",
+      "length": 0.29999999999999993
+    },
+    {
+      "name": "right_upper_leg_to_right_lower_leg",
+      "start_joint": "right_upper_leg",
+      "end_joint": "right_lower_leg",
+      "length": 0.4
+    },
+    {
+      "name": "right_lower_leg_to_right_foot",
+      "start_joint": "right_lower_leg",
+      "end_joint": "right_foot",
+      "length": 0.3
+    }
+  ],
   "metadata": {
     "generated_by": "MockRigger",
     "version": "1.0.0",
