@@ -41,6 +41,7 @@
 - [Utilities](./api/utilities.md)
 
 # Integration
+- [Meshy AI Integration](./integration/meshy-ai.md)
 - [MuJoCo Integration](./integration/mujoco.md)
 - [Isaac Lab Integration](./integration/isaac-lab.md)
 - [Wonder3D Integration](./integration/wonder3d.md)

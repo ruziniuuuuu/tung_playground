@@ -243,7 +243,7 @@
 <h2 id="supported-technologies"><a class="header" href="#supported-technologies">Supported Technologies</a></h2>
 <h3 id="aiml-frameworks"><a class="header" href="#aiml-frameworks">AI/ML Frameworks</a></h3>
 <ul>
-<li><strong>3D Generation</strong>: Wonder3D, Era3D, Commercial APIs (Tripo, Meshy)</li>
+<li><strong>3D Generation</strong>: Meshy AI, Wonder3D, Era3D, Commercial APIs (Tripo)</li>
 <li><strong>Part Decomposition</strong>: PartCrafter, Custom segmentation algorithms</li>
 <li><strong>RL Training</strong>: PPO, SAC, TD3 with popular RL libraries</li>
 </ul>
@@ -269,7 +269,7 @@ hero = tp.create_hero("my_character", "character.png")
 # Set up the complete pipeline
 pipeline = tp.create_pipeline()
 pipeline.add_stages([
-    tp.Wonder3DGenerator("generation"),
+    tp.MeshyGenerator("generation"),
     tp.PartCrafterDecomposer("decomposition"),
     tp.AutoRigger("rigging"),
     tp.URDFBuilder("urdf"),
@@ -1608,13 +1608,329 @@ class MyPlugin(PipelineStage):
 <div style="break-before: page; page-break-before: always;"></div><h1 id="pipeline-api"><a class="header" href="#pipeline-api">Pipeline API</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="plugin-api"><a class="header" href="#plugin-api">Plugin API</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="utilities"><a class="header" href="#utilities">Utilities</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="meshy-ai-integration"><a class="header" href="#meshy-ai-integration">Meshy AI Integration</a></h1>
+<p>This guide covers integrating <a href="https://www.meshy.ai/">Meshy AI</a> for high-quality image-to-3D generation in your Tung Playground pipeline.</p>
+<h2 id="overview-1"><a class="header" href="#overview-1">Overview</a></h2>
+<p>Meshy AI provides state-of-the-art AI models for converting 2D images into 3D models with textures. The integration supports:</p>
+<ul>
+<li><strong>High-quality 3D generation</strong> from single images</li>
+<li><strong>Automatic texturing</strong> with PBR material generation</li>
+<li><strong>Multiple output formats</strong> (OBJ, GLB, FBX, etc.)</li>
+<li><strong>Configurable quality levels</strong> and polygon counts</li>
+<li><strong>Asynchronous processing</strong> with progress tracking</li>
+</ul>
+<h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
+<h3 id="1-get-api-key"><a class="header" href="#1-get-api-key">1. Get API Key</a></h3>
+<ol>
+<li>Sign up at <a href="https://www.meshy.ai/">meshy.ai</a></li>
+<li>Navigate to your API settings</li>
+<li>Generate an API key</li>
+<li>Set the environment variable:</li>
+</ol>
+<pre><code class="language-bash">export MESHY_API_KEY="your_api_key_here"
+</code></pre>
+<h3 id="2-install-dependencies-1"><a class="header" href="#2-install-dependencies-1">2. Install Dependencies</a></h3>
+<p>The Meshy integration uses <code>httpx</code> for async HTTP requests, which is included in the base dependencies:</p>
+<pre><code class="language-bash">uv sync
+</code></pre>
+<h3 id="3-configuration"><a class="header" href="#3-configuration">3. Configuration</a></h3>
+<p>Add Meshy configuration to your config file:</p>
+<pre><code class="language-yaml"># config/meshy.yaml
+stages:
+  generation:
+    meshy:
+      api_key: null  # Use environment variable MESHY_API_KEY
+      base_url: "https://api.meshy.ai"
+      model: "meshy-5"
+      topology: "triangle"
+      target_polycount: 10000
+      should_texture: true
+      enable_pbr: false
+      texture_prompt: ""
+      content_safety: true
+      poll_interval: 10  # seconds
+      max_wait_time: 1800  # 30 minutes
+</code></pre>
+<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
+<h3 id="basic-usage-3"><a class="header" href="#basic-usage-3">Basic Usage</a></h3>
+<pre><code class="language-python">import tung_playground as tp
+from tung_playground.generation import MeshyGenerator
+
+# Create hero
+hero = tp.create_hero("my_hero", "character.png")
+
+# Configure Meshy generator
+config = {
+    "meshy": {
+        "model": "meshy-5",
+        "target_polycount": 15000,
+        "should_texture": True,
+        "enable_pbr": True
+    }
+}
+
+generator = MeshyGenerator("meshy_gen", config)
+
+# Generate 3D model
+result = await generator.process(hero)
+
+if result.status == tp.StageStatus.COMPLETED:
+    print(f"Generated mesh: {result.outputs['mesh_path']}")
+    print(f"Quality score: {result.outputs['quality_score']:.2f}")
+</code></pre>
+<h3 id="pipeline-integration"><a class="header" href="#pipeline-integration">Pipeline Integration</a></h3>
+<pre><code class="language-python"># Create pipeline with Meshy generator
+pipeline = tp.create_pipeline()
+
+# Add Meshy generation stage
+meshy_config = {
+    "meshy": {
+        "model": "meshy-5",
+        "quality": "high",
+        "should_texture": True
+    }
+}
+
+pipeline.add_stage(MeshyGenerator("generation", meshy_config))
+
+# Add other stages...
+# pipeline.add_stage(MockDecomposer("decomposition"))
+# etc.
+
+# Execute pipeline
+results = await pipeline.execute(hero)
+</code></pre>
+<h3 id="using-the-demo-scripts"><a class="header" href="#using-the-demo-scripts">Using the Demo Scripts</a></h3>
+<h4 id="simple-generation"><a class="header" href="#simple-generation">Simple Generation</a></h4>
+<pre><code class="language-bash"># Generate with default settings
+python examples/meshy_generation_demo.py generate "my_hero" "path/to/image.png"
+
+# High quality with textures
+python examples/meshy_generation_demo.py generate "my_hero" "image.png" \
+    --quality high --textured --model meshy-5
+
+# Check your credits
+python examples/meshy_generation_demo.py check-credits
+</code></pre>
+<h4 id="full-pipeline"><a class="header" href="#full-pipeline">Full Pipeline</a></h4>
+<pre><code class="language-bash"># Run complete pipeline with Meshy
+python examples/configurable_pipeline_demo.py run "my_hero" "image.png" \
+    --generator meshy --quality high
+
+# Run only generation + URDF stages
+python examples/configurable_pipeline_demo.py run "my_hero" "image.png" \
+    --generator meshy --stages "generation,urdf"
+</code></pre>
+<h2 id="configuration-options"><a class="header" href="#configuration-options">Configuration Options</a></h2>
+<h3 id="quality-presets"><a class="header" href="#quality-presets">Quality Presets</a></h3>
+<p>The integration includes quality presets for common use cases:</p>
+<pre><code class="language-python">quality_settings = {
+    "low": {
+        "target_polycount": 5000,
+        "should_texture": False
+    },
+    "medium": {
+        "target_polycount": 10000, 
+        "should_texture": True
+    },
+    "high": {
+        "target_polycount": 20000,
+        "should_texture": True,
+        "enable_pbr": True
+    }
+}
+</code></pre>
+<h3 id="advanced-configuration-1"><a class="header" href="#advanced-configuration-1">Advanced Configuration</a></h3>
+<pre><code class="language-yaml">stages:
+  generation:
+    meshy:
+      # Model selection
+      model: "meshy-5"  # Latest model
+      
+      # Mesh configuration
+      topology: "triangle"  # or "quad"
+      target_polycount: 15000
+      
+      # Texturing options
+      should_texture: true
+      enable_pbr: true  # Generate metallic/roughness/normal maps
+      texture_prompt: "clean, high-resolution textures"
+      
+      # Safety and processing
+      content_safety: true  # Screen for harmful content
+      poll_interval: 5  # Check status every 5 seconds
+      max_wait_time: 3600  # Wait up to 1 hour
+</code></pre>
+<h2 id="output-formats"><a class="header" href="#output-formats">Output Formats</a></h2>
+<p>Meshy AI generates multiple formats. The integration automatically selects the best available:</p>
+<ol>
+<li><strong>OBJ</strong> (preferred) - Widely compatible</li>
+<li><strong>GLB</strong> - Compact binary format</li>
+<li><strong>FBX</strong> - Animation-ready format</li>
+</ol>
+<p>Generated assets include:</p>
+<ul>
+<li><strong>3D Mesh</strong> - Main geometry file</li>
+<li><strong>Textures</strong> - Diffuse, normal, metallic, roughness maps (if PBR enabled)</li>
+<li><strong>Thumbnail</strong> - Preview image</li>
+<li><strong>Metadata</strong> - Generation parameters and statistics</li>
+</ul>
+<h2 id="error-handling-1"><a class="header" href="#error-handling-1">Error Handling</a></h2>
+<p>The integration includes robust error handling:</p>
+<pre><code class="language-python">try:
+    result = await generator.process(hero)
+    
+    if result.status == tp.StageStatus.FAILED:
+        print(f"Generation failed: {result.error}")
+        
+except tp.ConfigurationError as e:
+    print(f"Configuration error: {e}")
+    
+except tp.ProcessingError as e:
+    print(f"Processing error: {e}")
+</code></pre>
+<p>Common error scenarios:</p>
+<ul>
+<li><strong>Missing API key</strong> - Set <code>MESHY_API_KEY</code> environment variable</li>
+<li><strong>Invalid image format</strong> - Use PNG, JPG, or JPEG</li>
+<li><strong>File too large</strong> - Images must be under 10MB</li>
+<li><strong>API rate limits</strong> - Reduce request frequency</li>
+<li><strong>Insufficient credits</strong> - Add credits to your Meshy account</li>
+</ul>
+<h2 id="performance-tips"><a class="header" href="#performance-tips">Performance Tips</a></h2>
+<h3 id="optimization"><a class="header" href="#optimization">Optimization</a></h3>
+<ol>
+<li>
+<p><strong>Image preparation</strong>:</p>
+<ul>
+<li>Use high-resolution images (512x512 or higher)</li>
+<li>Ensure good lighting and contrast</li>
+<li>Remove background for better results</li>
+</ul>
+</li>
+<li>
+<p><strong>Quality vs Speed</strong>:</p>
+<ul>
+<li>Use lower polygon counts for faster generation</li>
+<li>Disable texturing for quick prototypes</li>
+<li>Enable PBR only when needed</li>
+</ul>
+</li>
+<li>
+<p><strong>Batch processing</strong>:</p>
+<ul>
+<li>Generate multiple heroes in parallel</li>
+<li>Use async/await properly for concurrent requests</li>
+</ul>
+</li>
+</ol>
+<h3 id="monitoring"><a class="header" href="#monitoring">Monitoring</a></h3>
+<pre><code class="language-python"># Monitor generation progress
+async def monitor_generation(generator, hero):
+    with Progress() as progress:
+        task = progress.add_task("Generating...", total=None)
+        
+        result = await generator.process(hero)
+        
+        progress.update(task, description="Complete!")
+    
+    return result
+</code></pre>
+<h2 id="cost-management"><a class="header" href="#cost-management">Cost Management</a></h2>
+<h3 id="credit-usage"><a class="header" href="#credit-usage">Credit Usage</a></h3>
+<ul>
+<li><strong>Basic generation</strong>: ~10 credits per model</li>
+<li><strong>With texturing</strong>: ~15 credits per model</li>
+<li><strong>PBR materials</strong>: ~20 credits per model</li>
+</ul>
+<h3 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h3>
+<ol>
+<li><strong>Test with mock generator</strong> first to validate pipeline</li>
+<li><strong>Use appropriate quality</strong> levels for your use case</li>
+<li><strong>Monitor credit usage</strong> with the API</li>
+<li><strong>Cache results</strong> to avoid regenerating</li>
+</ol>
+<pre><code class="language-bash"># Check credits before generation
+python examples/meshy_generation_demo.py check-credits
+</code></pre>
+<h2 id="troubleshooting-3"><a class="header" href="#troubleshooting-3">Troubleshooting</a></h2>
+<h3 id="common-issues-1"><a class="header" href="#common-issues-1">Common Issues</a></h3>
+<p><strong>API Key Issues</strong>:</p>
+<pre><code class="language-bash"># Check if API key is set
+echo $MESHY_API_KEY
+
+# Set temporarily
+export MESHY_API_KEY="your_key"
+
+# Set permanently (Linux/Mac)
+echo 'export MESHY_API_KEY="your_key"' &gt;&gt; ~/.bashrc
+source ~/.bashrc
+</code></pre>
+<p><strong>Network/Timeout Issues</strong>:</p>
+<pre><code class="language-yaml"># Increase timeouts in config
+stages:
+  generation:
+    meshy:
+      max_wait_time: 3600  # 1 hour
+      poll_interval: 30   # Check every 30 seconds
+</code></pre>
+<p><strong>Quality Issues</strong>:</p>
+<ul>
+<li>Use higher resolution input images</li>
+<li>Ensure good lighting and contrast</li>
+<li>Try different texture prompts</li>
+<li>Enable PBR for better materials</li>
+</ul>
+<h3 id="debug-mode"><a class="header" href="#debug-mode">Debug Mode</a></h3>
+<p>Enable detailed logging:</p>
+<pre><code class="language-python">import logging
+logging.getLogger('tung_playground.generation.meshy_generator').setLevel(logging.DEBUG)
+</code></pre>
+<h2 id="api-reference-1"><a class="header" href="#api-reference-1">API Reference</a></h2>
+<h3 id="meshygenerator-class"><a class="header" href="#meshygenerator-class">MeshyGenerator Class</a></h3>
+<pre><code class="language-python">class MeshyGenerator(Image3DGenerator):
+    def __init__(self, name: str, config: Optional[Dict[str, Any]] = None)
+    async def generate_3d(self, hero: Hero) -&gt; GenerationResult
+    def validate_inputs(self, hero: Hero) -&gt; bool
+</code></pre>
+<h3 id="configuration-schema"><a class="header" href="#configuration-schema">Configuration Schema</a></h3>
+<pre><code class="language-python">{
+    "meshy": {
+        "api_key": str,              # API key (use env var)
+        "base_url": str,             # API base URL
+        "model": str,                # Model version
+        "topology": str,             # "triangle" or "quad"  
+        "target_polycount": int,     # Target polygon count
+        "should_texture": bool,      # Generate textures
+        "enable_pbr": bool,          # Generate PBR maps
+        "texture_prompt": str,       # Texture guidance
+        "content_safety": bool,      # Content screening
+        "poll_interval": int,        # Status check interval (seconds)
+        "max_wait_time": int         # Maximum wait time (seconds)
+    }
+}
+</code></pre>
+<h2 id="examples-1"><a class="header" href="#examples-1">Examples</a></h2>
+<p>See the following example scripts:</p>
+<ul>
+<li><code>examples/meshy_generation_demo.py</code> - Single generation with Meshy</li>
+<li><code>examples/configurable_pipeline_demo.py</code> - Full pipeline with generator selection</li>
+<li><code>examples/full_pipeline_demo.py</code> - Mock pipeline for comparison</li>
+</ul>
+<h2 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h2>
+<ul>
+<li><a href="https://docs.meshy.ai/">Meshy AI Documentation</a></li>
+<li><a href="https://docs.meshy.ai/api-reference">Meshy AI API Reference</a></li>
+<li><a href="integration/../architecture/pipeline.html">Pipeline Architecture</a></li>
+<li><a href="integration/../architecture/configuration.html">Configuration Guide</a></li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="mujoco-integration"><a class="header" href="#mujoco-integration">MuJoCo Integration</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="isaac-lab-integration-1"><a class="header" href="#isaac-lab-integration-1">Isaac Lab Integration</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="wonder3d-integration"><a class="header" href="#wonder3d-integration">Wonder3D Integration</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="partcrafter-integration"><a class="header" href="#partcrafter-integration">PartCrafter Integration</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="complete-pipeline-demo"><a class="header" href="#complete-pipeline-demo">Complete Pipeline Demo</a></h1>
 <p>This example demonstrates the full AIGC hero pipeline using the sample character image. It showcases every stage from image input to trained policy output.</p>
-<h2 id="overview-1"><a class="header" href="#overview-1">Overview</a></h2>
+<h2 id="overview-2"><a class="header" href="#overview-2">Overview</a></h2>
 <p>The complete demo processes a character through all six pipeline stages:</p>
 <ol>
 <li><strong>Image-to-3D Generation</strong>: Convert character image to 3D mesh</li>
@@ -1925,8 +2241,8 @@ results = await pipeline.execute(hero)
 <li><strong><a href="examples/./advanced-config.html">Advanced Configuration</a></strong>: Fine-tune parameters</li>
 <li><strong><a href="examples/../integration/mujoco.html">Integration Guide</a></strong>: Connect with external tools</li>
 </ul>
-<h2 id="troubleshooting-3"><a class="header" href="#troubleshooting-3">Troubleshooting</a></h2>
-<h3 id="common-issues-1"><a class="header" href="#common-issues-1">Common Issues</a></h3>
+<h2 id="troubleshooting-4"><a class="header" href="#troubleshooting-4">Troubleshooting</a></h2>
+<h3 id="common-issues-2"><a class="header" href="#common-issues-2">Common Issues</a></h3>
 <p><strong>Problem</strong>: <code>FileNotFoundError: image not found</code>
 <strong>Solution</strong>: Ensure the sample image exists or provide a valid path</p>
 <p><strong>Problem</strong>: Pipeline hangs at training stage
@@ -1936,12 +2252,12 @@ results = await pipeline.execute(hero)
 <p>For more help, see the <a href="examples/../troubleshooting/common-issues.html">Troubleshooting Guide</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="custom-pipeline"><a class="header" href="#custom-pipeline">Custom Pipeline</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="batch-processing"><a class="header" href="#batch-processing">Batch Processing</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="advanced-configuration-1"><a class="header" href="#advanced-configuration-1">Advanced Configuration</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="advanced-configuration-2"><a class="header" href="#advanced-configuration-2">Advanced Configuration</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="production-deployment"><a class="header" href="#production-deployment">Production Deployment</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="docker-setup"><a class="header" href="#docker-setup">Docker Setup</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="performance-tuning"><a class="header" href="#performance-tuning">Performance Tuning</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="monitoring"><a class="header" href="#monitoring">Monitoring</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="common-issues-2"><a class="header" href="#common-issues-2">Common Issues</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="monitoring-1"><a class="header" href="#monitoring-1">Monitoring</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="common-issues-3"><a class="header" href="#common-issues-3">Common Issues</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="performance-problems"><a class="header" href="#performance-problems">Performance Problems</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="debug-guide"><a class="header" href="#debug-guide">Debug Guide</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="faq"><a class="header" href="#faq">FAQ</a></h1>
@@ -1967,22 +2283,6 @@ results = await pipeline.execute(hero)
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script>
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
 

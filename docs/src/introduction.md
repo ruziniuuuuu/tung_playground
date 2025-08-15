@@ -72,8 +72,8 @@ The framework processes your hero through six distinct stages:
 ## Supported Technologies
 
 ### AI/ML Frameworks
-- **3D Generation**: Wonder3D, Era3D, Commercial APIs (Tripo, Meshy)
-- **Part Decomposition**: PartCrafter, Custom segmentation algorithms
+- **3D Generation**: Meshy AI, Wonder3D, Era3D, Commercial APIs (Tripo)
+- **Part Decomposition**: PartCrafter, Custom segmentation algorithms  
 - **RL Training**: PPO, SAC, TD3 with popular RL libraries
 
 ### Physics Simulators
@@ -99,7 +99,7 @@ hero = tp.create_hero("my_character", "character.png")
 # Set up the complete pipeline
 pipeline = tp.create_pipeline()
 pipeline.add_stages([
-    tp.Wonder3DGenerator("generation"),
+    tp.MeshyGenerator("generation"),
     tp.PartCrafterDecomposer("decomposition"),
     tp.AutoRigger("rigging"),
     tp.URDFBuilder("urdf"),

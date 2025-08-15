@@ -245,7 +245,7 @@
 <h2 id="supported-technologies"><a class="header" href="#supported-technologies">Supported Technologies</a></h2>
 <h3 id="aiml-frameworks"><a class="header" href="#aiml-frameworks">AI/ML Frameworks</a></h3>
 <ul>
-<li><strong>3D Generation</strong>: Wonder3D, Era3D, Commercial APIs (Tripo, Meshy)</li>
+<li><strong>3D Generation</strong>: Meshy AI, Wonder3D, Era3D, Commercial APIs (Tripo)</li>
 <li><strong>Part Decomposition</strong>: PartCrafter, Custom segmentation algorithms</li>
 <li><strong>RL Training</strong>: PPO, SAC, TD3 with popular RL libraries</li>
 </ul>
@@ -271,7 +271,7 @@ hero = tp.create_hero("my_character", "character.png")
 # Set up the complete pipeline
 pipeline = tp.create_pipeline()
 pipeline.add_stages([
-    tp.Wonder3DGenerator("generation"),
+    tp.MeshyGenerator("generation"),
     tp.PartCrafterDecomposer("decomposition"),
     tp.AutoRigger("rigging"),
     tp.URDFBuilder("urdf"),
@@ -321,22 +321,6 @@ print(f"Hero {hero.name} is ready with policy at {hero.assets.trained_policy}")
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script>
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
 

@@ -26,6 +26,7 @@ dependencies = [
     "typer",
     "requests",
     "aiohttp",
+    "httpx",
     "asyncio-mqtt",
     "pathlib",
     "dataclasses-json"
