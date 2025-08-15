@@ -1,0 +1,63 @@
+# Tung Playground Default Configuration
+
+# Global settings
+global:
+  log_level: INFO
+  max_workers: 4
+  timeout: 1800  # 30 minutes
+  
+# Pipeline configuration
+pipeline:
+  retry_attempts: 2
+  retry_delay: 5.0
+  validate_inputs: true
+  validate_outputs: true
+  
+# Stage configurations
+stages:
+  generation:
+    output_format: "obj"
+    quality_threshold: 0.7
+    max_resolution: 1024
+    
+  decomposition:
+    min_parts: 2
+    max_parts: 20
+    quality_threshold: 0.8
+    
+  rigging:
+    auto_detect_joints: true
+    max_joints: 50
+    symmetry_detection: true
+    
+  urdf:
+    physics_engine: "mujoco"
+    auto_generate_collisions: true
+    mesh_decimation: 0.5
+    
+  simulation:
+    default_environment: "mujoco"
+    physics_timestep: 0.002
+    
+  training:
+    algorithm: "ppo"
+    total_timesteps: 1000000
+    learning_rate: 0.0003
+    
+# Directory structure
+directories:
+  heroes: "heroes"
+  config: "config"
+  logs: "logs"
+  cache: ".cache"
+  
+# Plugin settings
+plugins:
+  auto_discover: true
+  search_paths:
+    - "src/tung_playground/generation"
+    - "src/tung_playground/decomposition"
+    - "src/tung_playground/rigging"
+    - "src/tung_playground/urdf"
+    - "src/tung_playground/simulation"
+    - "src/tung_playground/training"
