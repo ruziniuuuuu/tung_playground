@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - Tung Playground Documentation</title>
+        <title>Framework Overview - Tung Playground Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -144,7 +144,7 @@
                         <a href="https://github.com/ruziniuuuuu/tung_playground" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/ruziniuuuuu/tung_playground/edit/main/docs/src/src/introduction.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/ruziniuuuuu/tung_playground/edit/main/docs/src/src/framework.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -173,137 +173,191 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>Welcome to <strong>Tung Playground</strong> - a comprehensive framework for generating AI heroes from images and training them in physics simulators using reinforcement learning.</p>
-<h2 id="what-is-tung-playground"><a class="header" href="#what-is-tung-playground">What is Tung Playground?</a></h2>
-<p>Tung Playground implements a complete AIGC (AI-Generated Content) pipeline that transforms a single character image into a fully-trained, locomotion-capable agent in a physics simulation environment.</p>
-<h3 id="complete-pipeline-flow"><a class="header" href="#complete-pipeline-flow">Complete Pipeline Flow</a></h3>
-<pre><code class="language-mermaid">graph LR
-    A[Input Image] --&gt; B[3D Generation]
-    B --&gt; C[Part Decomposition]
-    C --&gt; D[Skeleton Rigging]
-    D --&gt; E[URDF Creation]
-    E --&gt; F[Simulation Setup]
-    F --&gt; G[RL Training]
-    G --&gt; H[Trained Agent]
+                        <h1 id="tung-playground-framework"><a class="header" href="#tung-playground-framework">Tung Playground Framework</a></h1>
+<p>A comprehensive, modular framework for generating AI heroes from images and training them in physics simulators using reinforcement learning.</p>
+<h2 id="architecture-overview"><a class="header" href="#architecture-overview">Architecture Overview</a></h2>
+<p>The framework implements a complete pipeline: <strong>Image → 3D Mesh → Part Decomposition → Skeleton → URDF → MuJoCo/Isaac Lab → RL Policy</strong></p>
+<h2 id="project-structure"><a class="header" href="#project-structure">Project Structure</a></h2>
+<pre><code>src/tung_playground/
+├── core/                    # Core framework components
+│   ├── hero.py             # Hero data model and asset management
+│   ├── pipeline.py         # Pipeline orchestration and stages
+│   └── exceptions.py       # Custom exception classes
+├── generation/             # Image-to-3D generation
+│   ├── base.py            # Abstract base classes
+│   ├── wonder3d.py        # Wonder3D integration (to implement)
+│   └── commercial.py      # Commercial API wrappers (to implement)
+├── decomposition/         # Part decomposition
+│   ├── base.py           # Abstract base classes
+│   └── partcrafter.py    # PartCrafter integration (to implement)
+├── rigging/              # Skeleton generation
+│   ├── base.py          # Abstract base classes
+│   └── auto_rigger.py   # Automatic rigging (to implement)
+├── urdf/                # URDF generation
+│   ├── base.py         # Abstract base classes
+│   └── builder.py      # URDF construction (to implement)
+├── simulation/          # Simulation adapters
+│   ├── base.py         # Abstract base classes
+│   ├── mujoco_adapter.py   # MuJoCo integration (to implement)
+│   └── isaac_adapter.py    # Isaac Lab integration (to implement)
+├── training/            # RL training
+│   ├── base.py         # Abstract base classes
+│   └── trainers.py     # Training implementations (to implement)
+├── utils/               # Utility modules
+│   ├── config.py       # Configuration management
+│   ├── logging.py      # Logging utilities
+│   ├── validation.py   # Validation utilities
+│   └── file_manager.py # File operations
+└── plugins/             # Plugin system
+    └── registry.py      # Plugin registration and discovery
 </code></pre>
-<p>The framework processes your hero through six distinct stages:</p>
-<ol>
-<li><strong>🖼️ Image-to-3D Generation</strong>: Convert 2D character images to 3D meshes using state-of-the-art AI models</li>
-<li><strong>🧩 Part Decomposition</strong>: Intelligently segment the 3D mesh into semantic body parts</li>
-<li><strong>🦴 Skeleton Rigging</strong>: Generate an articulated skeleton with proper joint hierarchies</li>
-<li><strong>🤖 URDF Generation</strong>: Create physics-ready robot descriptions with mass, inertia, and collision properties</li>
-<li><strong>🌍 Simulation Setup</strong>: Deploy the character in MuJoCo or Isaac Lab environments</li>
-<li><strong>🧠 RL Training</strong>: Train locomotion policies using reinforcement learning algorithms</li>
-</ol>
 <h2 id="key-features"><a class="header" href="#key-features">Key Features</a></h2>
-<h3 id="-modular-architecture"><a class="header" href="#-modular-architecture">🔧 Modular Architecture</a></h3>
+<h3 id="1-modular-architecture"><a class="header" href="#1-modular-architecture">1. Modular Architecture</a></h3>
 <ul>
-<li><strong>Plugin-based System</strong>: Each pipeline stage is independently replaceable</li>
-<li><strong>Hot-swappable Algorithms</strong>: Easily switch between different AI models and methods</li>
-<li><strong>Extensible Design</strong>: Add new capabilities without modifying core framework</li>
+<li>Each pipeline stage is independently replaceable</li>
+<li>Plugin-based system for easy extension</li>
+<li>Clean separation of concerns</li>
 </ul>
-<h3 id="-performance--scalability"><a class="header" href="#-performance--scalability">⚡ Performance &amp; Scalability</a></h3>
+<h3 id="2-configuration-management"><a class="header" href="#2-configuration-management">2. Configuration Management</a></h3>
 <ul>
-<li><strong>Async Pipeline Execution</strong>: Concurrent processing with automatic retry logic</li>
-<li><strong>Batch Processing</strong>: Handle multiple heroes simultaneously</li>
-<li><strong>Distributed Computing</strong>: Scale across multiple machines and GPUs</li>
+<li>YAML-based configuration with hierarchical merging</li>
+<li>Stage-specific configuration support</li>
+<li>User configuration overrides</li>
 </ul>
-<h3 id="-production-ready"><a class="header" href="#-production-ready">🛡️ Production Ready</a></h3>
+<h3 id="3-hero-asset-management"><a class="header" href="#3-hero-asset-management">3. Hero Asset Management</a></h3>
 <ul>
-<li><strong>Type Safety</strong>: Comprehensive type hints and validation throughout</li>
-<li><strong>Error Recovery</strong>: Robust error handling with detailed logging</li>
-<li><strong>Configuration Management</strong>: YAML-based hierarchical configuration system</li>
-<li><strong>Asset Tracking</strong>: Complete audit trail of all generated files</li>
+<li>Centralized asset tracking throughout pipeline</li>
+<li>Automatic directory structure creation</li>
+<li>Metadata persistence and retrieval</li>
 </ul>
-<h3 id="-developer-experience"><a class="header" href="#-developer-experience">🎯 Developer Experience</a></h3>
+<h3 id="4-pipeline-orchestration"><a class="header" href="#4-pipeline-orchestration">4. Pipeline Orchestration</a></h3>
 <ul>
-<li><strong>Rich Documentation</strong>: Comprehensive guides and API references</li>
-<li><strong>Easy Integration</strong>: Well-defined interfaces for adding new algorithms</li>
-<li><strong>Debug Tools</strong>: Built-in validation and troubleshooting utilities</li>
-<li><strong>Example Gallery</strong>: Ready-to-run examples and tutorials</li>
+<li>Async execution with retry logic</li>
+<li>Input/output validation</li>
+<li>Comprehensive logging and progress tracking</li>
+<li>Batch processing support</li>
 </ul>
-<h2 id="why-tung-playground"><a class="header" href="#why-tung-playground">Why Tung Playground?</a></h2>
-<h3 id="for-researchers"><a class="header" href="#for-researchers">For Researchers</a></h3>
+<h3 id="5-plugin-system"><a class="header" href="#5-plugin-system">5. Plugin System</a></h3>
 <ul>
-<li><strong>Rapid Prototyping</strong>: Test new AIGC algorithms in a complete pipeline</li>
-<li><strong>Standardized Evaluation</strong>: Compare different methods using consistent metrics</li>
-<li><strong>Reproducible Results</strong>: Version-controlled configurations and deterministic execution</li>
+<li>Dynamic plugin discovery and registration</li>
+<li>Type-safe plugin interfaces</li>
+<li>Dependency management</li>
 </ul>
-<h3 id="for-developers"><a class="header" href="#for-developers">For Developers</a></h3>
-<ul>
-<li><strong>Production Framework</strong>: Industrial-strength architecture for real applications</li>
-<li><strong>Flexible Integration</strong>: Works with existing ML workflows and infrastructure</li>
-<li><strong>Open Source</strong>: MIT license with active community contributions</li>
-</ul>
-<h3 id="for-content-creators"><a class="header" href="#for-content-creators">For Content Creators</a></h3>
-<ul>
-<li><strong>Automated Workflow</strong>: Transform character concepts into interactive agents</li>
-<li><strong>High Quality Output</strong>: State-of-the-art AI models for professional results</li>
-<li><strong>Customizable Pipeline</strong>: Tune each stage for specific artistic requirements</li>
-</ul>
-<h2 id="supported-technologies"><a class="header" href="#supported-technologies">Supported Technologies</a></h2>
-<h3 id="aiml-frameworks"><a class="header" href="#aiml-frameworks">AI/ML Frameworks</a></h3>
-<ul>
-<li><strong>3D Generation</strong>: Wonder3D, Era3D, Commercial APIs (Tripo, Meshy)</li>
-<li><strong>Part Decomposition</strong>: PartCrafter, Custom segmentation algorithms</li>
-<li><strong>RL Training</strong>: PPO, SAC, TD3 with popular RL libraries</li>
-</ul>
-<h3 id="physics-simulators"><a class="header" href="#physics-simulators">Physics Simulators</a></h3>
-<ul>
-<li><strong>MuJoCo</strong>: High-performance physics for robotics research</li>
-<li><strong>Isaac Lab</strong>: GPU-accelerated simulation for large-scale training</li>
-<li><strong>Custom Adapters</strong>: Extensible interface for other simulators</li>
-</ul>
-<h3 id="file-formats"><a class="header" href="#file-formats">File Formats</a></h3>
-<ul>
-<li><strong>3D Models</strong>: OBJ, PLY, STL, COLLADA, glTF</li>
-<li><strong>Robot Descriptions</strong>: URDF, SDF, MJCF</li>
-<li><strong>Policies</strong>: PyTorch, ONNX, custom formats</li>
-</ul>
-<h2 id="quick-example"><a class="header" href="#quick-example">Quick Example</a></h2>
-<p>Here’s how simple it is to create and train a hero:</p>
+<h2 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h2>
+<h3 id="installation"><a class="header" href="#installation">Installation</a></h3>
+<pre><code class="language-bash"># Install in development mode
+uv sync
+uv pip install -e .
+
+# Install with ML dependencies
+uv pip install -e ".[ml]"
+
+# Install with Isaac Lab support
+uv pip install -e ".[isaac]"
+</code></pre>
+<h3 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h3>
 <pre><code class="language-python">import tung_playground as tp
 
 # Create a hero from an image
-hero = tp.create_hero("my_character", "character.png")
+hero = tp.create_hero(
+    name="my_hero",
+    image_path="path/to/image.png"
+)
 
-# Set up the complete pipeline
-pipeline = tp.create_pipeline()
-pipeline.add_stages([
-    tp.Wonder3DGenerator("generation"),
-    tp.PartCrafterDecomposer("decomposition"),
-    tp.AutoRigger("rigging"),
-    tp.URDFBuilder("urdf"),
-    tp.MuJoCoAdapter("simulation"),
-    tp.PPOTrainer("training")
-])
+# Create and configure pipeline
+pipeline = tp.create_pipeline("default")
 
-# Execute the full pipeline
+# Add stages (when implemented)
+# pipeline.add_stage(Wonder3DGenerator("generation"))
+# pipeline.add_stage(PartCrafterDecomposer("decomposition"))
+# ...
+
+# Execute pipeline
 results = await pipeline.execute(hero)
-
-# Your hero is now ready for action!
-print(f"Hero {hero.name} is ready with policy at {hero.assets.trained_policy}")
 </code></pre>
-<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
-<p>Ready to create your first AI hero? Jump to our <a href="./getting-started/quick-start.html">Quick Start Guide</a> to get up and running in minutes.</p>
-<p>For a deeper understanding of the system architecture, check out the <a href="./architecture/overview.html">Architecture Overview</a>.</p>
-<h2 id="community--support"><a class="header" href="#community--support">Community &amp; Support</a></h2>
-<ul>
-<li><strong>📚 Documentation</strong>: Comprehensive guides and API references</li>
-<li><strong>🐛 Issues</strong>: Report bugs and request features on GitHub</li>
-<li><strong>💬 Discussions</strong>: Join our community for help and collaboration</li>
-<li><strong>🔔 Updates</strong>: Follow development progress and releases</li>
-</ul>
-<hr />
-<p><em>Tung Playground makes AI-powered character creation accessible, scalable, and production-ready. Welcome to the future of interactive content generation!</em></p>
+<h3 id="configuration"><a class="header" href="#configuration">Configuration</a></h3>
+<p>Create <code>config/custom.yaml</code>:</p>
+<pre><code class="language-yaml">pipeline:
+  retry_attempts: 3
+  timeout: 3600
+
+stages:
+  generation:
+    quality_threshold: 0.8
+    output_format: "ply"
+  
+  training:
+    total_timesteps: 2000000
+    learning_rate: 0.0001
+</code></pre>
+<p>Load with: <code>tp.load_config("custom")</code></p>
+<h2 id="development-workflow"><a class="header" href="#development-workflow">Development Workflow</a></h2>
+<h3 id="1-implementing-pipeline-stages"><a class="header" href="#1-implementing-pipeline-stages">1. Implementing Pipeline Stages</a></h3>
+<p>Each stage inherits from <code>PipelineStage</code>:</p>
+<pre><code class="language-python">from tung_playground.core.pipeline import PipelineStage, StageResult
+
+class MyGenerator(PipelineStage):
+    PLUGIN_TYPE = "generation"
+    
+    async def process(self, hero: Hero) -&gt; StageResult:
+        # Implementation here
+        pass
+    
+    def validate_inputs(self, hero: Hero) -&gt; bool:
+        # Input validation
+        pass
+    
+    def validate_outputs(self, result: StageResult) -&gt; bool:
+        # Output validation
+        pass
+</code></pre>
+<h3 id="2-plugin-registration"><a class="header" href="#2-plugin-registration">2. Plugin Registration</a></h3>
+<pre><code class="language-python">from tung_playground.plugins import register_plugin
+
+register_plugin(
+    name="my_generator",
+    plugin_type="generation", 
+    class_type=MyGenerator,
+    description="My custom generator"
+)
+</code></pre>
+<h3 id="3-testing"><a class="header" href="#3-testing">3. Testing</a></h3>
+<pre><code class="language-bash"># Run example
+python examples/basic_usage.py
+
+# Run tests (when added)
+pytest tests/
+</code></pre>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<p>The framework is now ready for implementation of the actual pipeline stages:</p>
+<ol>
+<li><strong>Wonder3D Integration</strong> - Image-to-3D generation</li>
+<li><strong>PartCrafter Integration</strong> - Part decomposition</li>
+<li><strong>Auto-rigging System</strong> - Skeleton generation</li>
+<li><strong>URDF Builder</strong> - Robot description generation</li>
+<li><strong>MuJoCo/Isaac Lab Adapters</strong> - Simulation integration</li>
+<li><strong>RL Training</strong> - Policy learning implementation</li>
+</ol>
+<p>Each module has abstract base classes defining the required interfaces, making implementation straightforward and type-safe.</p>
+<h2 id="configuration-reference"><a class="header" href="#configuration-reference">Configuration Reference</a></h2>
+<p>See <code>config/default.yaml</code> for the complete configuration schema with all available options and defaults.</p>
+<h2 id="contributing"><a class="header" href="#contributing">Contributing</a></h2>
+<ol>
+<li>Implement pipeline stages following the established patterns</li>
+<li>Add comprehensive tests for new functionality</li>
+<li>Update documentation and examples</li>
+<li>Follow the coding standards in <code>CLAUDE.md</code></li>
+</ol>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
-                            <a rel="next prefetch" href="framework.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="pipeline-demo-results.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -313,8 +367,11 @@ print(f"Hero {hero.name} is ready with policy at {hero.assets.trained_policy}")
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
-                    <a rel="next prefetch" href="framework.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="pipeline-demo-results.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
