@@ -67,8 +67,7 @@ async def generate_3d_asset(
     hero_name: str,
     image_path: str,
     quality: str = "medium",
-    texture_prompt: Optional[str] = None,
-    output_dir: str = "heroes"
+    texture_prompt: Optional[str] = None
 ) -> bool:
     """Generate a 3D asset from an image using Meshy AI.
     
@@ -77,7 +76,6 @@ async def generate_3d_asset(
         image_path: Path to the input character image
         quality: Quality level - "low", "medium", or "high"
         texture_prompt: Optional text prompt to guide texture generation
-        output_dir: Directory to store generated assets
         
     Returns:
         True if generation was successful, False otherwise
@@ -122,7 +120,7 @@ async def generate_3d_asset(
     try:
         # Create hero
         print(f"\n🦸 Creating hero...")
-        hero = tp.create_hero(hero_name, str(image_file), base_dir=output_dir)
+        hero = tp.create_hero(hero_name, str(image_file))
         print(f"✅ Hero created: {hero.name}")
         print(f"   Output directory: {hero.hero_dir}")
         
@@ -243,15 +241,13 @@ async def generate_3d_asset(
 
 async def batch_generate(
     image_directory: str,
-    quality: str = "low",
-    output_dir: str = "heroes"
+    quality: str = "low"
 ) -> None:
     """Generate 3D assets for multiple images in a directory.
     
     Args:
         image_directory: Directory containing input images
         quality: Quality level for all generations
-        output_dir: Output directory for generated heroes
     """
     print(f"🔄 Batch 3D Asset Generation")
     print(f"=" * 35)
@@ -286,8 +282,7 @@ async def batch_generate(
         success = await generate_3d_asset(
             hero_name=hero_name,
             image_path=str(image_file),
-            quality=quality,
-            output_dir=output_dir
+            quality=quality
         )
         
         if success:
