@@ -168,7 +168,8 @@ class MeshyGenerator(Image3DGenerator):
             payload["texture_prompt"] = self.texture_prompt
         
         try:
-            async with httpx.AsyncClient(timeout=60.0) as client:
+            # Create client with proxy bypass for Meshy AI
+            async with httpx.AsyncClient(timeout=60.0, trust_env=False) as client:
                 response = await client.post(
                     f"{self.base_url}/openapi/v1/image-to-3d",
                     headers=headers,
@@ -206,7 +207,7 @@ class MeshyGenerator(Image3DGenerator):
         start_time = time.time()
         
         try:
-            async with httpx.AsyncClient(timeout=30.0) as client:
+            async with httpx.AsyncClient(timeout=30.0, trust_env=False) as client:
                 while True:
                     # Check if we've exceeded max wait time
                     if time.time() - start_time > self.max_wait_time:
@@ -280,7 +281,7 @@ class MeshyGenerator(Image3DGenerator):
         output_path = hero.directory / f"generated_mesh{file_extension}"
         
         try:
-            async with httpx.AsyncClient(timeout=300.0) as client:  # 5 min timeout for download
+            async with httpx.AsyncClient(timeout=300.0, trust_env=False) as client:  # 5 min timeout for download
                 response = await client.get(download_url)
                 
                 if response.status_code != 200:
