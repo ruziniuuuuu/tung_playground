@@ -41,6 +41,24 @@ from .plugins import (
     list_plugins,
 )
 
+# Template system
+from .templates import (
+    RobotTemplate,
+    TemplateType,
+    PartType,
+    TemplateLibrary,
+    BipedTemplate,
+    QuadrupedTemplate,
+)
+
+# Template matching
+from .matching import (
+    PartMatcher,
+    MatchingResult,
+    PartMatch,
+    TemplatePartMatcher,
+)
+
 # Visualization (optional)
 try:
     from .visualization import URDFVisualizer
@@ -76,8 +94,24 @@ __all__ = [
     "register_plugin",
     "get_plugin",
     "list_plugins",
+    # Templates
+    "RobotTemplate",
+    "TemplateType",
+    "PartType", 
+    "TemplateLibrary",
+    "BipedTemplate",
+    "QuadrupedTemplate",
+    # Template Matching
+    "PartMatcher",
+    "MatchingResult",
+    "PartMatch",
+    "TemplatePartMatcher",
     # Visualization
     "VISUALIZATION_AVAILABLE",
+    # Helper functions
+    "create_hero",
+    "create_pipeline", 
+    "create_template_pipeline",
     # Version
     "__version__",
 ]
@@ -127,3 +161,49 @@ def create_pipeline(config_name: str = "default") -> Pipeline:
     pipeline_config = PipelineConfig(**config_dict.get("pipeline", {}))
     
     return Pipeline("default", pipeline_config)
+
+
+def create_template_pipeline(
+    template_type: str = "auto",
+    physics_engine: str = "mujoco"
+) -> Pipeline:
+    """Create a template-based generation pipeline.
+    
+    Args:
+        template_type: Template type to use ("auto", "biped", "quadruped").
+        physics_engine: Physics engine for URDF ("mujoco", "pybullet").
+        
+    Returns:
+        Configured template-based Pipeline instance.
+    """
+    from .generation.mock_generator import MockGenerator
+    from .decomposition.mock_decomposer import MockDecomposer  
+    from .urdf.template_builder import TemplateURDFBuilder
+    
+    config = PipelineConfig(
+        stage_configs={
+            "template_matcher": {
+                "preferred_template_type": template_type if template_type != "auto" else None,
+                "auto_select_template": template_type == "auto",
+                "min_match_score": 0.5,
+                "min_coverage_ratio": 0.6
+            },
+            "template_urdf_builder": {
+                "physics_engine": physics_engine,
+                "generate_collision_meshes": True,
+                "mesh_scale_factor": 1.0
+            }
+        }
+    )
+    
+    pipeline = Pipeline("template_based_generation", config)
+    
+    # Add stages
+    pipeline.add_stages([
+        MockGenerator("3d_generation"),
+        MockDecomposer("decomposition"),  
+        TemplatePartMatcher("template_matcher"),
+        TemplateURDFBuilder("template_urdf_builder"),
+    ])
+    
+    return pipeline

@@ -33,17 +33,42 @@ Tung Playground is a Python project that enables AI-generated heroes to live in 
 
 ## Architecture Notes
 
-The project implements a complete AIGC hero simulation pipeline: **Image → 3D Mesh → Part Decomposition → Skeleton → URDF → MuJoCo/Isaac Lab → RL Policy**
+The project implements a **template-based** AIGC hero simulation pipeline: **Image → 3D Mesh → Part Decomposition → Template Matching → URDF Assembly → MuJoCo/Isaac Lab → RL Policy**
+
+This architecture replaces complex skeleton generation with a practical template matching approach, making the system more robust and maintainable.
 
 ### Framework Components
 - **Core System**: Hero data model, pipeline orchestration, plugin registry
-- **Generation Module**: Image-to-3D conversion (Wonder3D, commercial APIs)
-- **Decomposition Module**: 3D mesh part decomposition (PartCrafter integration)
-- **Rigging Module**: Automatic skeleton generation and binding
-- **URDF Module**: Robot description file generation with physics properties
+- **Generation Module**: Image-to-3D conversion (Wonder3D, Tripo3D, Meshy AI)
+- **Decomposition Module**: 3D mesh part decomposition (semantic segmentation)
+- **Template System**: Robot templates (biped, quadruped, multi-legged) with predefined kinematic structures
+- **Matching Module**: Intelligent part-to-template matching using geometric and semantic features
+- **URDF Assembly**: Template-based robot description generation with real part meshes
 - **Simulation Module**: MuJoCo and Isaac Lab integration adapters
 - **Training Module**: Reinforcement learning policy training framework
 - **Utils Module**: Configuration management, logging, validation, file operations
+
+### Template-Based Approach
+
+The new template-based architecture offers several advantages over skeleton generation:
+
+**Template System:**
+- **Predefined Robots**: Biped, quadruped, and extensible multi-legged templates
+- **Kinematic Structure**: Each template defines joints, links, and their relationships
+- **Physical Properties**: Mass, inertia, joint limits, and actuator specifications
+- **Extensibility**: Easy to add new template types (hexapod, snake-like, etc.)
+
+**Smart Matching:**
+- **Geometric Analysis**: Part size, shape, aspect ratios, and spatial relationships
+- **Semantic Understanding**: Optional part labeling and classification
+- **Scoring System**: Multi-criteria matching with configurable weights
+- **Quality Assurance**: Coverage ratio and confidence scoring
+
+**Benefits:**
+- **Robustness**: No complex skeleton estimation - use proven kinematic structures
+- **Quality**: Consistent joint placement and realistic physical properties
+- **Speed**: Much faster than skeleton generation and rigging
+- **Maintainability**: Easy to debug, customize, and extend templates
 
 ### Key Design Principles
 - **Modular Pipeline**: Each stage is independently replaceable via plugin system
@@ -51,6 +76,7 @@ The project implements a complete AIGC hero simulation pipeline: **Image → 3D 
 - **Async Execution**: Full async support with retry logic and batch processing
 - **Type Safety**: Comprehensive type hints and Pydantic data validation
 - **Extensibility**: Plugin architecture allows easy addition of new algorithms
+- **Template-First Design**: Prioritize proven kinematic structures over generative approaches
 
 ## Code Style Guidelines
 
@@ -127,7 +153,61 @@ from tung_playground.core import Hero
 from tung_playground.utils import validation
 ```
 
+## Template-Based Hero Generation
+
+### Quick Start
+
+The system now uses a template-based approach for robust robot generation:
+
+```python
+# Simple usage
+from tung_playground import create_hero, create_template_pipeline
+
+hero = create_hero("my_robot", "image.png")
+pipeline = create_template_pipeline(template_type="biped")
+await pipeline.execute(hero)
+print(f"URDF generated: {hero.assets.urdf}")
+```
+
+### Available Templates
+
+- **Biped Template**: Humanoid robots (16 links, 14 DOF)
+- **Quadruped Template**: Four-legged animals (17 links, 12+ DOF)
+- **Extensible**: Easy to add hexapod, snake-like, etc.
+
+### Configuration
+
+```python
+config = {
+    "template_matcher": {
+        "preferred_template_type": "quadruped",
+        "auto_select_template": False,
+        "min_match_score": 0.6,
+        "size_weight": 0.3,
+        "shape_weight": 0.4,
+        "semantic_weight": 0.2
+    }
+}
+```
+
+### Usage Example
+
+```bash
+python examples/template_matching_example.py --name test_hero --template auto
+```
+
 ## Development Workflow
+
+### Project Rules and Guidelines
+
+1. **Template-First Design**: Always use template matching instead of skeleton generation
+2. **No Standalone Documentation**: Avoid creating separate markdown files - use docs/ directory or CLAUDE.md
+3. **Configuration-Driven**: Make systems configurable rather than hardcoded
+4. **Async by Default**: Use async/await for all I/O operations
+5. **Type Safety**: Always include type hints and use Pydantic for data validation
+6. **Plugin Architecture**: Design components to be pluggable and replaceable
+7. **Mock for Development**: Provide mock implementations for testing and development
+8. **Pipeline-Based**: Structure processing as composable pipeline stages
 
 ### Git Commit Strategy
 - **Feature-based commits**: Group related changes into logical commits
