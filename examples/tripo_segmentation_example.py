@@ -24,6 +24,7 @@ from tung_playground.core.hero import Hero
 from tung_playground.core.pipeline import Pipeline, PipelineConfig
 from tung_playground.generation.tripo_generator import TripoGenerator
 from tung_playground.decomposition.tripo_decomposer import TripoDecomposer
+from tung_playground.decomposition.mock_decomposer import MockDecomposer
 from tung_playground.matching.template_matcher import TemplatePartMatcher
 from tung_playground.urdf.template_builder import TemplateURDFBuilder
 
@@ -202,14 +203,16 @@ async def create_hero_with_tripo_segmentation(
     return hero
 
 
-async def test_segmentation_only(mesh_path: Path, hero_name: str = "test_segmentation"):
+async def test_segmentation_only(mesh_path: Path, hero_name: str = "test_segmentation", use_mock: bool = False):
     """Test only the segmentation functionality with an existing mesh.
     
     Args:
         mesh_path: Path to existing 3D mesh file.
         hero_name: Name for test hero.
+        use_mock: Whether to use mock decomposer instead of Tripo.
     """
-    print(f"🧪 Testing Tripo3D segmentation with existing mesh: {mesh_path}")
+    decomposer_type = "Mock" if use_mock else "Tripo3D"
+    print(f"🧪 Testing {decomposer_type} segmentation with existing mesh: {mesh_path}")
     
     # Create test hero
     hero_dir = Path("heroes") / hero_name
@@ -217,7 +220,7 @@ async def test_segmentation_only(mesh_path: Path, hero_name: str = "test_segment
     
     hero = Hero(
         name=hero_name,
-        description=f"Test segmentation of {mesh_path.name}",
+        description=f"Test {decomposer_type} segmentation of {mesh_path.name}",
         hero_dir=hero_dir
     )
     
@@ -225,21 +228,32 @@ async def test_segmentation_only(mesh_path: Path, hero_name: str = "test_segment
     hero.assets.mesh_3d = mesh_path
     
     # Create decomposer
-    decomposer = TripoDecomposer("test_tripo_decomposer", {
-        "tripo": {
-            "detail_level": "medium",
-            "smoothness": 0.5,
-            "generate_labels": True,
-            "output_format": "obj"
-        }
-    })
+    if use_mock:
+        decomposer = MockDecomposer("test_mock_decomposer", {
+            "num_parts": 5,
+            "simulate_processing_time": True,
+            "min_processing_time": 1.0,
+            "max_processing_time": 3.0,
+            "failure_rate": 0.0,
+            "output_format": "obj",
+            "generate_realistic_parts": True
+        })
+    else:
+        decomposer = TripoDecomposer("test_tripo_decomposer", {
+            "tripo": {
+                "detail_level": "medium",
+                "smoothness": 0.5,
+                "generate_labels": True,
+                "output_format": "obj"
+            }
+        })
     
     try:
         # Run segmentation
         result = await decomposer.process(hero)
         
         if result.status.value == "completed":
-            print("✅ Segmentation completed successfully!")
+            print(f"✅ {decomposer_type} segmentation completed successfully!")
             parts_paths = result.outputs.get("parts_paths", [])
             part_names = result.outputs.get("part_names", [])
             
@@ -247,10 +261,10 @@ async def test_segmentation_only(mesh_path: Path, hero_name: str = "test_segment
             for i, (path, name) in enumerate(zip(parts_paths, part_names)):
                 print(f"   Part {i+1}: {name} → {path}")
         else:
-            print(f"❌ Segmentation failed: {result.error}")
+            print(f"❌ {decomposer_type} segmentation failed: {result.error}")
     
     except Exception as e:
-        print(f"❌ Segmentation error: {e}")
+        print(f"❌ {decomposer_type} segmentation error: {e}")
 
 
 async def main():
@@ -263,6 +277,7 @@ async def main():
     parser.add_argument("--quality", choices=["standard", "high"], default="standard", help="Generation quality")
     parser.add_argument("--output", help="Output directory")
     parser.add_argument("--test-only", action="store_true", help="Test segmentation with existing mesh")
+    parser.add_argument("--use-mock", action="store_true", help="Use mock decomposer instead of Tripo3D")
     
     args = parser.parse_args()
     
@@ -279,7 +294,7 @@ async def main():
             print(f"❌ Mesh file not found: {mesh_path}")
             return
         
-        await test_segmentation_only(mesh_path, args.name)
+        await test_segmentation_only(mesh_path, args.name, args.use_mock)
     
     else:
         # Full pipeline
