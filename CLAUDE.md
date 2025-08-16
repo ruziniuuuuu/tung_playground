@@ -83,8 +83,11 @@ The new template-based architecture offers several advantages over skeleton gene
 ### Documentation Standards
 - **Use Google-style docstrings** for all functions, classes, and modules
 - **All comments and documentation must be in English**
+- **All code comments must be in English** and follow Google-style formatting
+- **Ensure code readability and extensibility** through clear, descriptive comments
 - Include type information in docstrings when not using type hints
 - Document parameters, return values, and exceptions
+- Add inline comments for complex logic and important implementation details
 
 Example:
 ```python
